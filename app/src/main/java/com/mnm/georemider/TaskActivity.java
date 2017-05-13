@@ -679,8 +679,9 @@ public class TaskActivity extends AppCompatActivity {
         str_logLocation = place.getAddress().toString();
         latitude = place.getLatLng().latitude;
         longitude = place.getLatLng().longitude;
-        if (!isInteger(str_locName.substring(0,1)))
+        if (!isInteger(str_locName.substring(0,1))){
             hasName = true;
+        }
         tv_locationName.setText(str_locName);
         tv_logLocation.setText(str_logLocation);
         ll_locationText.setVisibility(View.VISIBLE);

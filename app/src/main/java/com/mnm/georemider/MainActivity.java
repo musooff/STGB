@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
@@ -194,13 +195,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             taskDatas.add(new TaskData(sh.getString("name","None"),
                     sh.getString("description","None"),
                     sh.getBoolean("hasName",false),
-                    sh.getString("logName","None"),
+                    sh.getString("locName","None"),
                     sh.getString("logLocation","None"),
                     new LatLng(sh.getFloat("lat",0),sh.getFloat("long",0)),
                     sh.getString("date","None"),
                     sh.getBoolean("isFriends",false),
                     sh.getInt("radius",0),
                     sh.getBoolean("isEntry",false)));
+
+            //Log.e("locName",sh.getString("locName","netu"));
             editor.putBoolean("newTask",false);
             editor.apply();
 
