@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_camera"
+            android:icon="@drawable/ic_task"
+            android:title="Add Task" />
+        <item
+            android:id="@+id/nav_gallery"
+            android:icon="@drawable/ic_task"
+            android:title="My Tasks" />
+        <item
+            android:id="@+id/nav_slideshow"
+            android:icon="@drawable/icon_friends"
+            android:title="My Friends" />
+    </group>
+
+    <item android:title="Setting">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/simple_user_image"
+                android:title="My Profile" />
+            <item
+                android:id="@+id/nav_send"
+                android:icon="@drawable/ic_locpt_30_5"
+                android:title="Log Out" />
+        </menu>
+    </item>
+
+</menu>
