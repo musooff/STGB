@@ -32,15 +32,14 @@
             android:name=".TaskActivity"
             android:label="New Task"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Friends"
+            android:label="Friends"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAmM7N3Lu8tK18sJ1z_mkE8jcM1RCWWuRA" />
 
-        <activity
-            android:name=".Main2Activity"
-            android:label="@string/title_activity_main2"
-            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".LoginActivity"
             android:label="@string/title_activity_login">

@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "284185799347",
+    "firebase_url": "https://srgb-1494677659180.firebaseio.com",
+    "project_id": "srgb-1494677659180",
+    "storage_bucket": "srgb-1494677659180.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:284185799347:android:2c7b4dce277c4683",
+        "android_client_info": {
+          "package_name": "com.mnm.georemider"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "284185799347-fea1dc4c7dt4ku75dbg47985im9lrsjg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDi-uniqLj3ffeZU4j3qPvvjKrkyzcONtU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

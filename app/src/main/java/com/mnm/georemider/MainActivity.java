@@ -24,17 +24,27 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
+    DrawerLayout drawer;
 
     RecyclerView rv_tasks;
     ArrayList<TaskData> taskDatas;
 
     SharedPreferences sh;
     SharedPreferences.Editor editor;
+
+    DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
+    DatabaseReference mClients = mRootRef.child("clients");
+    DatabaseReference mUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
@@ -71,17 +81,47 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         rv_tasks = (RecyclerView)findViewById(R.id.rv_tasks);
-
-        taskDatas.add(new TaskData("Mars","get some cookies",true,"Mejom","Mejom", new LatLng(5,5), "2 hours ago",true,30,true));
 /*
+        taskDatas.add(new TaskData("Mars","get some cookies",true,"Mejom","Mejom", new LatLng(5,5), "2 hours ago",true,30,true));
+
         taskDatas.add(new TaskData("Some books","Harry Potter 5","Main Library", new LatLng(5,5), "2 hours ago",false,30,true));
-        taskDatas.add(new TaskData("Boots","Gotta buy boots","Adidas Store", new LatLng(5,5), "1.5 hours ago",true,30,true));
+        taskDatas.add(new    TaskData("Boots","Gotta buy boots","Adidas Store", new LatLng(5,5), "1.5 hours ago",true,30,true));
         taskDatas.add(new TaskData("Make up","Gotta buy libstrick","Mejon", new LatLng(5,5), "1 hour ago",false,30,true));
         taskDatas.add(new TaskData("Mars","get some cookies","Mejon", new LatLng(5,5), "2 hours ago",false,30,true));
         taskDatas.add(new TaskData("Some books","Harry Potter 5","Main Library", new LatLng(5,5), "2 hours ago",false,30,true));
         taskDatas.add(new TaskData("Boots","Gotta buy boots","Adidas Store", new LatLng(5,5), "1.5 hours ago",false,30,true));
         taskDatas.add(new TaskData("Make up","Gotta buy libstrick","Mejon", new LatLng(5,5), "1 hour ago",false,30,true));
 */
+
+        mUser = mClients.child("musooff");
+        mUser.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot child :dataSnapshot.getChildren()){
+                    if (child.getKey().startsWith("TASK: ")){
+                        taskDatas.add(new TaskData(
+                                child.child("taskName").getValue(String.class),
+                                child.child("taskDescription").getValue(String.class),
+                                child.child("hasLocName").getValue(Boolean.class),
+                                child.child("locName").getValue(String.class),
+                                child.child("locAddress").getValue(String.class),
+                                new LatLng(child.child("locLat").getValue(Double.class),child.child("locLong").getValue(Double.class)),
+                                child.child("time").getValue(String.class),
+                                child.child("friends").getValue(Boolean.class),
+                                child.child("radius").getValue(Integer.class),
+                                child.child("entry").getValue(Boolean.class)
+
+                        ));
+                        rv_tasks.getAdapter().notifyDataSetChanged();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         /*
         int count = sharedPreferences.getInt("count",0);
@@ -121,6 +161,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id){
+            case R.id.nav_friends:
+                Intent friends = new Intent(getApplicationContext(),Friends.class);
+                startActivity(friends);
+                drawer.closeDrawers();
+                break;
+            case R.id.nav_task:
+                Intent new_task = new Intent(getApplicationContext(),TaskActivity.class);
+                startActivity(new_task);
+                drawer.closeDrawers();
+                break;
+        }
+
         return false;
     }
 
@@ -192,6 +247,40 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onResume() {
         super.onResume();
         if (sh.getBoolean("newTask",false)){
+
+            mUser = mClients.child("musooff");
+            mUser.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    DataSnapshot child = dataSnapshot.child(sh.getString("name",null));
+
+                    taskDatas.add(new TaskData(
+                            child.child("taskName").getValue(String.class),
+                            child.child("taskDescription").getValue(String.class),
+                            child.child("hasLocName").getValue(Boolean.class),
+                            child.child("locName").getValue(String.class),
+                            child.child("locAddress").getValue(String.class),
+                            new LatLng(child.child("locLat").getValue(Double.class),child.child("locLong").getValue(Double.class)),
+                            child.child("time").getValue(String.class),
+                            child.child("friends").getValue(Boolean.class),
+                            child.child("radius").getValue(Integer.class),
+                            child.child("entry").getValue(Boolean.class)
+
+                    ));
+                    rv_tasks.getAdapter().notifyDataSetChanged();
+                    editor.putBoolean("newTask",false);
+                    editor.apply();
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+/*
+
             taskDatas.add(new TaskData(sh.getString("name","None"),
                     sh.getString("description","None"),
                     sh.getBoolean("hasName",false),
@@ -204,10 +293,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     sh.getBoolean("isEntry",false)));
 
             //Log.e("locName",sh.getString("locName","netu"));
-            editor.putBoolean("newTask",false);
-            editor.apply();
+            */
 
-            rv_tasks.getAdapter().notifyItemInserted(taskDatas.size()-1);
         }
 
 

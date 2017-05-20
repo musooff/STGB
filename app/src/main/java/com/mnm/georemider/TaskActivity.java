@@ -51,6 +51,10 @@ import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Exclude;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 
 import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
@@ -66,6 +70,9 @@ import java.util.Locale;
 
 public class TaskActivity extends AppCompatActivity {
 
+    DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
+    DatabaseReference mClients = mRootRef.child("clients");
+    DatabaseReference mUser ;
 
     TextInputEditText et_name, et_description;
     CardView cv_current, cv_map, cv_edit, cv_minus, cv_plus;
@@ -237,9 +244,30 @@ public class TaskActivity extends AppCompatActivity {
                 if (taskName.equals("")) {
                     Toast.makeText(getApplicationContext(), "Please, enter task name", Toast.LENGTH_SHORT).show();
                 } else {
+
+                    mUser = mClients.child("musooff");
+                    createdTimestamp = ServerValue.TIMESTAMP;
+
+                    DatabaseReference newTask = mUser.child("TASK: "+taskName);
+                    newTask.child("taskName").setValue(taskName);
+                    newTask.child("taskDescription").setValue(taskDescription);
+                    newTask.child("hasLocName").setValue(hasName);
+                    newTask.child("locName").setValue(str_locName);
+                    newTask.child("locAddress").setValue(str_logLocation);
+                    newTask.child("locLat").setValue(latitude);
+                    newTask.child("locLong").setValue(longitude);
+                    newTask.child("time").setValue(str_dates);
+                    newTask.child("friends").setValue(isFriends);
+                    newTask.child("radius").setValue(radius);
+                    newTask.child("entry").setValue(isEntry);
+
+
+
                     sharedPreferences = getSharedPreferences("TaskData", 0);
                     editor = sharedPreferences.edit();
-                    editor.putString("name", taskName);
+                    editor.putString("name", "TASK: "+taskName);
+
+                    /*
                     editor.putString("description", taskDescription);
                     editor.putBoolean("hasName",hasName);
                     editor.putString("locName",str_locName);
@@ -250,6 +278,8 @@ public class TaskActivity extends AppCompatActivity {
                     editor.putBoolean("isFriends", isFriends);
                     editor.putInt("radius", radius);
                     editor.putBoolean("isEntry", isEntry);
+*/
+
                     editor.putBoolean("newTask", true);
                     editor.apply();
                     onBackPressed();
@@ -350,6 +380,21 @@ public class TaskActivity extends AppCompatActivity {
             }
         });
 
+
+
+
+    }
+    //member variable
+    Object createdTimestamp;
+
+
+    @Exclude
+    public long getCreatedTimestampLong(){
+        return (long)createdTimestamp;
+    }
+    @Exclude
+    public String getCreatedTimestampString(){
+        return (String) createdTimestamp;
     }
 
     public void onRadioButtonClicked(View view) {
