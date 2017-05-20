@@ -1,6 +1,8 @@
 package com.mnm.georemider;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -10,6 +12,7 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -81,17 +84,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         rv_tasks = (RecyclerView)findViewById(R.id.rv_tasks);
-/*
-        taskDatas.add(new TaskData("Mars","get some cookies",true,"Mejom","Mejom", new LatLng(5,5), "2 hours ago",true,30,true));
 
-        taskDatas.add(new TaskData("Some books","Harry Potter 5","Main Library", new LatLng(5,5), "2 hours ago",false,30,true));
-        taskDatas.add(new    TaskData("Boots","Gotta buy boots","Adidas Store", new LatLng(5,5), "1.5 hours ago",true,30,true));
-        taskDatas.add(new TaskData("Make up","Gotta buy libstrick","Mejon", new LatLng(5,5), "1 hour ago",false,30,true));
-        taskDatas.add(new TaskData("Mars","get some cookies","Mejon", new LatLng(5,5), "2 hours ago",false,30,true));
-        taskDatas.add(new TaskData("Some books","Harry Potter 5","Main Library", new LatLng(5,5), "2 hours ago",false,30,true));
-        taskDatas.add(new TaskData("Boots","Gotta buy boots","Adidas Store", new LatLng(5,5), "1.5 hours ago",false,30,true));
-        taskDatas.add(new TaskData("Make up","Gotta buy libstrick","Mejon", new LatLng(5,5), "1 hour ago",false,30,true));
-*/
 
         mUser = mClients.child("musooff");
         mUser.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -174,6 +167,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(new_task);
                 drawer.closeDrawers();
                 break;
+            case R.id.nav_logout:
+                new android.app.AlertDialog.Builder(this)
+                        .setTitle("Loging out")
+                        .setMessage("Are you sure, you want to log out?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                editor.clear();
+                                editor.apply();
+                                finish();
+                            }
+                        })
+                        .setNegativeButton("No", null)
+                        .show();
         }
 
         return false;
@@ -278,22 +286,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 }
             });
-
-/*
-
-            taskDatas.add(new TaskData(sh.getString("name","None"),
-                    sh.getString("description","None"),
-                    sh.getBoolean("hasName",false),
-                    sh.getString("locName","None"),
-                    sh.getString("logLocation","None"),
-                    new LatLng(sh.getFloat("lat",0),sh.getFloat("long",0)),
-                    sh.getString("date","None"),
-                    sh.getBoolean("isFriends",false),
-                    sh.getInt("radius",0),
-                    sh.getBoolean("isEntry",false)));
-
-            //Log.e("locName",sh.getString("locName","netu"));
-            */
 
         }
 

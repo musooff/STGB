@@ -51,10 +51,13 @@ import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
+import com.google.firebase.database.ValueEventListener;
 
 import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
@@ -149,7 +152,7 @@ public class TaskActivity extends AppCompatActivity {
         iv_everyTime = (ImageView) findViewById(R.id.iv_everytime);
 
 
-        FloatingActionButton task_fab = (FloatingActionButton) findViewById(R.id.task_fab);
+        final FloatingActionButton task_fab = (FloatingActionButton) findViewById(R.id.task_fab);
 
         cv_minus.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -247,42 +250,44 @@ public class TaskActivity extends AppCompatActivity {
 
                     mUser = mClients.child("musooff");
                     createdTimestamp = ServerValue.TIMESTAMP;
+                    DatabaseReference taskCount  = mUser.child("taskCount");
+                    taskCount.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            long count = dataSnapshot.getValue(Long.class);
+                            count++;
+                            DatabaseReference newTask = mUser.child("TASK: "+count);
+                            newTask.child("taskName").setValue(taskName);
+                            newTask.child("taskDescription").setValue(taskDescription);
+                            newTask.child("hasLocName").setValue(hasName);
+                            newTask.child("locName").setValue(str_locName);
+                            newTask.child("locAddress").setValue(str_logLocation);
+                            newTask.child("locLat").setValue(latitude);
+                            newTask.child("locLong").setValue(longitude);
+                            newTask.child("time").setValue(str_dates);
+                            newTask.child("friends").setValue(isFriends);
+                            newTask.child("radius").setValue(radius);
+                            newTask.child("entry").setValue(isEntry);
+                            mUser.child("taskCount").setValue(count);
 
-                    DatabaseReference newTask = mUser.child("TASK: "+taskName);
-                    newTask.child("taskName").setValue(taskName);
-                    newTask.child("taskDescription").setValue(taskDescription);
-                    newTask.child("hasLocName").setValue(hasName);
-                    newTask.child("locName").setValue(str_locName);
-                    newTask.child("locAddress").setValue(str_logLocation);
-                    newTask.child("locLat").setValue(latitude);
-                    newTask.child("locLong").setValue(longitude);
-                    newTask.child("time").setValue(str_dates);
-                    newTask.child("friends").setValue(isFriends);
-                    newTask.child("radius").setValue(radius);
-                    newTask.child("entry").setValue(isEntry);
 
 
+                            sharedPreferences = getSharedPreferences("TaskData", 0);
+                            editor = sharedPreferences.edit();
+                            editor.putString("name", "TASK: "+count);
 
-                    sharedPreferences = getSharedPreferences("TaskData", 0);
-                    editor = sharedPreferences.edit();
-                    editor.putString("name", "TASK: "+taskName);
+                            editor.putBoolean("newTask", true);
+                            editor.apply();
+                            onBackPressed();
+                        }
 
-                    /*
-                    editor.putString("description", taskDescription);
-                    editor.putBoolean("hasName",hasName);
-                    editor.putString("locName",str_locName);
-                    editor.putString("logLocation", str_logLocation);
-                    editor.putFloat("lat", (float) latitude);
-                    editor.putFloat("long", (float) longitude);
-                    editor.putString("date", str_dates);
-                    editor.putBoolean("isFriends", isFriends);
-                    editor.putInt("radius", radius);
-                    editor.putBoolean("isEntry", isEntry);
-*/
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
 
-                    editor.putBoolean("newTask", true);
-                    editor.apply();
-                    onBackPressed();
+                        }
+                    });
+
+
                 }
             }
         });

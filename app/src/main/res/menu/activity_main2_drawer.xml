@@ -15,11 +15,11 @@
     <item android:title="Setting">
         <menu>
             <item
-                android:id="@+id/nav_share"
+                android:id="@+id/nav_myprofile"
                 android:icon="@drawable/simple_user_image"
                 android:title="My Profile" />
             <item
-                android:id="@+id/nav_send"
+                android:id="@+id/nav_logout"
                 android:icon="@drawable/ic_locpt_30_5"
                 android:title="Log Out" />
         </menu>
