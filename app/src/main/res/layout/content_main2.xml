@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.mnm.georemider.MainActivity"
-    tools:showIn="@layout/app_bar_main2">
+    tools:showIn="@layout/app_bar_main2"
+    android:background="@color/colorPrimary">
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
