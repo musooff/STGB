@@ -21,13 +21,11 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".LoginActivity" />
+        <activity
+            android:name=".SplashActivity"
             android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-        <activity android:name=".LoginActivity">
-        </activity>
-        <activity android:name=".SplashActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -38,7 +36,8 @@
             android:name=".TaskActivity"
             android:label="New Task"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Friends"
+        <activity
+            android:name=".Friends"
             android:label="Friends"
             android:theme="@style/AppTheme.NoActionBar" />
 
@@ -46,6 +45,8 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAmM7N3Lu8tK18sJ1z_mkE8jcM1RCWWuRA" />
 
+        <activity android:name=".register" />
+        <activity android:name=".Register"></activity>
     </application>
 
 </manifest>

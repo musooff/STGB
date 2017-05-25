@@ -39,9 +39,17 @@ public class LoginActivity extends AppCompatActivity {
         editor.apply();
 
         Button regButton = (Button)findViewById(R.id.email_sign_in_button);
+        Button RegisterButton = (Button)findViewById(R.id.reg_front_page);
         username = (TextInputEditText)findViewById(R.id.email);
         password = (TextInputEditText)findViewById(R.id.password);
-
+        RegisterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent register = new Intent(getApplicationContext(),Register.class);
+                startActivity(register);
+                finish();
+            }
+        });
         final String[] str_username = new String[1];
         final String[] str_pass = new String[1];
 

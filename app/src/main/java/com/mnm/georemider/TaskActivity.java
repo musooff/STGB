@@ -270,8 +270,6 @@ public class TaskActivity extends AppCompatActivity {
                             newTask.child("entry").setValue(isEntry);
                             mUser.child("taskCount").setValue(count);
 
-
-
                             sharedPreferences = getSharedPreferences("TaskData", 0);
                             editor = sharedPreferences.edit();
                             editor.putString("name", "TASK: "+count);
