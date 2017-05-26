@@ -33,7 +33,6 @@ public class Register extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        setContentView(R.layout.activity_login);
 
         Button regButton = (Button)findViewById(R.id.register_button);
         lastName = (TextInputEditText)findViewById(R.id.lastName);
@@ -61,20 +60,26 @@ public class Register extends AppCompatActivity {
                         last_name[0] = lastName.getText().toString();
                         first_name[0] = firstName.getText().toString();
                         str_con_pass[0] = con_password.getText().toString();
-                        if (str_email[0].equals("") || str_pass[0].equals("")){
-                            Toast.makeText(getApplicationContext(),"Please, enter appropriate information",Toast.LENGTH_SHORT).show();
-                            if (str_username[0].equals("") ){
-                                Toast.makeText(getApplicationContext(),"Please, enter username information",Toast.LENGTH_SHORT).show();
+                        if (!(str_email[0].equals("") ) || !(str_pass[0].equals(""))){
+                            if (!(str_username[0].equals("") )){
                                    if(!(str_pass[0].equals(str_con_pass[0]))){
                                        Toast.makeText(getApplicationContext(),"password is not match",Toast.LENGTH_SHORT).show();
                                    }  else{
                                        mUser = mClients.child(str_username[0]);
-                                       mUser.child("eamil").setValue(str_email[0]);
+                                       mUser.child("email").setValue(str_email[0]);
                                        mUser.child("name").setValue(last_name[0]+" "+first_name[0]);
                                        mUser.child("password").setValue(str_pass[0]);
+
+                                       Intent login = new Intent(getApplicationContext(),LoginActivity.class);
+                                       startActivity(login);
+                                       finish();
+
                                    }
 
                             }
+                        }else{
+
+                            Toast.makeText(getApplicationContext(),"Please, enter appropriate information",Toast.LENGTH_SHORT).show();
                         }
 
                     }
