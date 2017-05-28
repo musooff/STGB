@@ -248,7 +248,11 @@ public class TaskActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Please, enter task name", Toast.LENGTH_SHORT).show();
                 } else {
 
-                    mUser = mClients.child("musooff");
+
+                    sharedPreferences = getSharedPreferences("TaskData", 0);
+                    editor = sharedPreferences.edit();
+
+                    mUser = mClients.child(sharedPreferences.getString("username",null));
                     createdTimestamp = ServerValue.TIMESTAMP;
                     DatabaseReference taskCount  = mUser.child("taskCount");
                     taskCount.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -270,12 +274,87 @@ public class TaskActivity extends AppCompatActivity {
                             newTask.child("entry").setValue(isEntry);
                             mUser.child("taskCount").setValue(count);
 
-                            sharedPreferences = getSharedPreferences("TaskData", 0);
-                            editor = sharedPreferences.edit();
                             editor.putString("name", "TASK: "+count);
 
                             editor.putBoolean("newTask", true);
                             editor.apply();
+
+
+                            // if its amoung friends add to friend tasks as well
+                            if (isFriends){
+
+                                DatabaseReference mFriends = mUser.child("friendsIDs");
+                                mFriends.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        final String[] friendIDs = dataSnapshot.getValue(String.class).split(",");
+                                        for (int j = 0; j < friendIDs.length; j++){
+                                            final DatabaseReference friend = mClients.child(friendIDs[j]);
+                                            final int finalJ = j;
+                                            friend.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                                    long count = dataSnapshot.child("friendTaskCount").getValue(Long.class);
+                                                    count++;
+
+                                                    DatabaseReference friendTask = friend.child("Friend TASK: "+count);
+                                                    friendTask.child("name").setValue(mUser.getKey());
+                                                    friendTask.child("taskName").setValue(taskName);
+                                                    friendTask.child("taskDescription").setValue(taskDescription);
+                                                    friendTask.child("hasLocName").setValue(hasName);
+                                                    friendTask.child("locName").setValue(str_locName);
+                                                    friendTask.child("locAddress").setValue(str_logLocation);
+                                                    friendTask.child("locLat").setValue(latitude);
+                                                    friendTask.child("locLong").setValue(longitude);
+                                                    friendTask.child("time").setValue(str_dates);
+                                                    friendTask.child("friends").setValue(isFriends);
+                                                    friendTask.child("radius").setValue(radius);
+                                                    friendTask.child("entry").setValue(isEntry);
+                                                    friend.child("friendTaskCount").setValue(count);
+
+
+                                                }
+
+                                                @Override
+                                                public void onCancelled(DatabaseError databaseError) {
+
+                                                }
+                                            });
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
+                                    }
+                                });
+                            }
+
+
+
+
+
+
+
+
+
+
+
+                            Intent service = new Intent(getApplicationContext(),MyService.class);
+                            service.putExtra("taskName",taskName);
+                            service.putExtra("taskDescription",taskDescription);
+                            service.putExtra("hasLocName",hasName);
+                            service.putExtra("locName",str_locName);
+                            service.putExtra("locAddress",str_logLocation);
+                            service.putExtra("locLat",latitude);
+                            service.putExtra("locLong",longitude);
+                            service.putExtra("time",str_dates);
+                            service.putExtra("friends",isFriends);
+                            service.putExtra("radius",radius);
+                            service.putExtra("entry",isEntry);
+
+
+                            startService(service);
                             onBackPressed();
                         }
 

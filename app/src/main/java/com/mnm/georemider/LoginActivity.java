@@ -77,6 +77,15 @@ public class LoginActivity extends AppCompatActivity {
                                         editor.putBoolean("dataExists",true);
                                         editor.apply();
 
+
+                                        // refresh device tokens as well
+                                        String devTok = username.child("deviceToken").getValue(String.class);
+                                        if (!devTok.equals(sharedPreferences.getString("deviceToken",null))){
+                                            mClients.child(str_username[0]).child("deviceToken").setValue(sharedPreferences.getString("deviceToken",null));
+                                            Toast.makeText(getApplicationContext(),"devideToken was updated",Toast.LENGTH_SHORT).show();
+                                        }
+
+
                                         Intent main = new Intent(getApplicationContext(),MainActivity.class);
                                         startActivity(main);
                                         finish();

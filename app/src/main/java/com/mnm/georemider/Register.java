@@ -34,6 +34,8 @@ public class Register extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        sharedPreferences = getSharedPreferences("TaskData",0);
+
         Button regButton = (Button)findViewById(R.id.register_button);
         lastName = (TextInputEditText)findViewById(R.id.lastName);
         firstName = (TextInputEditText)findViewById(R.id.firstName);
@@ -69,6 +71,12 @@ public class Register extends AppCompatActivity {
                                        mUser.child("email").setValue(str_email[0]);
                                        mUser.child("name").setValue(last_name[0]+" "+first_name[0]);
                                        mUser.child("password").setValue(str_pass[0]);
+                                       mUser.child("taskCount").setValue(0);
+                                       mUser.child("friendsIDs").setValue("");
+                                       mUser.child("friendNames").setValue("");
+
+                                       // Adding device token for firebase messaging
+                                       mUser.child("deviceToken").setValue(sharedPreferences.getString("deviceToken",""));
 
                                        Intent login = new Intent(getApplicationContext(),LoginActivity.class);
                                        startActivity(login);

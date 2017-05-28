@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         rv_tasks = (RecyclerView)findViewById(R.id.rv_tasks);
 
 
-        mUser = mClients.child("musooff");
+        mUser = mClients.child(sh.getString("username",null));
         mUser.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -200,7 +200,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             View adItemLayoutView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.task_item,parent,false);
-            return new TaskViewHolder(adItemLayoutView);
+
+            final TaskViewHolder viewHolder = new TaskViewHolder(adItemLayoutView);
+            adItemLayoutView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = viewHolder.getAdapterPosition();
+                    if (position!= RecyclerView.NO_POSITION){
+                        Intent each_task = new Intent(getApplicationContext(),EachTask.class);
+                        each_task.putExtra("taskName",mRecyclerViewItems.get(position).getName());
+                        each_task.putExtra("taskDesc",mRecyclerViewItems.get(position).getNeed());
+                        each_task.putExtra("locName",mRecyclerViewItems.get(position).getLocationName());
+                        each_task.putExtra("locAddress",mRecyclerViewItems.get(position).getLogicalLocation());
+                        each_task.putExtra("radius",mRecyclerViewItems.get(position).getRadius());
+                        each_task.putExtra("time",mRecyclerViewItems.get(position).getTime());
+                        each_task.putExtra("entry",mRecyclerViewItems.get(position).isEntry());
+                        each_task.putExtra("friends",mRecyclerViewItems.get(position).isFriends());
+                        startActivity(each_task);
+                    }
+                }
+            });
+
+            return viewHolder;
         }
 
         @Override
@@ -245,6 +266,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             }
         }
+
     }
 
     @Override
@@ -252,7 +274,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onResume();
         if (sh.getBoolean("newTask",false)){
 
-            mUser = mClients.child("musooff");
+            mUser = mClients.child(sh.getString("username",""));
             mUser.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
