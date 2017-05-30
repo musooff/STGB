@@ -62,14 +62,18 @@ public class LoginActivity extends AppCompatActivity {
                         str_username[0] = username.getText().toString();
                         str_pass[0] = password.getText().toString();
 
+                        int found = 0;
+
                         if (str_username[0].equals("") || str_pass[0].equals("")){
                             Toast.makeText(getApplicationContext(),"Please, enter appropriate information",Toast.LENGTH_SHORT).show();
                         }
                         else {
                             for (DataSnapshot username : dataSnapshot.getChildren()){
                                 if (username.getKey().equals(str_username[0])){
+                                    found +=1;
                                     String pass = username.child("password").getValue(String.class);
                                     if (str_pass[0].equals(pass)){
+
                                         editor.putString("username",str_username[0]);
                                         editor.putString("password",str_pass[0]);
                                         editor.putString("clientName",username.child("name").getValue(String.class));
@@ -85,7 +89,6 @@ public class LoginActivity extends AppCompatActivity {
                                             Toast.makeText(getApplicationContext(),"devideToken was updated",Toast.LENGTH_SHORT).show();
                                         }
 
-
                                         Intent main = new Intent(getApplicationContext(),MainActivity.class);
                                         startActivity(main);
                                         finish();
@@ -94,12 +97,13 @@ public class LoginActivity extends AppCompatActivity {
                                         Toast.makeText(getApplicationContext(),"Username or password is incorrect",Toast.LENGTH_SHORT).show();
 
                                     }
-                                }
-                                else {
-                                    Toast.makeText(getApplicationContext(),"Username is not found",Toast.LENGTH_SHORT).show();
-
+                                    break;
                                 }
                             }
+                            if(!(found == 1)){
+                                Toast.makeText(getApplicationContext(),"Username not found",Toast.LENGTH_SHORT).show();
+                            }
+
                         }
                     }
 
