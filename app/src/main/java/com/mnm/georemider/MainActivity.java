@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
@@ -28,6 +29,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -45,6 +50,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     DatabaseReference mClients = mRootRef.child("clients");
     DatabaseReference mUser;
 
+    JSONObject jUser;
+    JSONArray jTasks;
+    JSONArray jFriendTasks;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +64,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         sh = getSharedPreferences("TaskData",0);
         editor = sh.edit();
         editor.apply();
+
+        try {
+            jUser = new JSONObject(sh.getString("userJsonData",""));
+            if (jUser.has("tasks")){
+                jTasks = jUser.getJSONArray("tasks");
+            }
+            if (jUser.has("friendTasks")){
+                jTasks = jUser.getJSONArray("friendTasks");
+            }
+            if (!jUser.has("tasks")){
+                jTasks = new JSONArray();
+                jUser.put("tasks",jTasks);
+            }
+            if (!jUser.has("friendTasks")){
+                jFriendTasks = new JSONArray();
+                jUser.put("friendTasks",jFriendTasks);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
 
         taskDatas = new ArrayList<>();
 
@@ -86,24 +116,108 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mUser.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
+                jUser = new JSONObject();
+                jTasks = new JSONArray();
+                jFriendTasks = new JSONArray();
+                try {
+                    jUser.put("tasks",jTasks);
+                    jUser.put("friendTasks",jFriendTasks);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 for (DataSnapshot child :dataSnapshot.getChildren()){
                     if (child.getKey().startsWith("TASK: ")){
-                        taskDatas.add(new TaskData(
-                                child.child("taskName").getValue(String.class),
-                                child.child("taskDescription").getValue(String.class),
-                                child.child("hasLocName").getValue(Boolean.class),
-                                child.child("locName").getValue(String.class),
-                                child.child("locAddress").getValue(String.class),
-                                new LatLng(child.child("locLat").getValue(Double.class),child.child("locLong").getValue(Double.class)),
-                                child.child("time").getValue(String.class),
-                                child.child("friends").getValue(Boolean.class),
-                                child.child("radius").getValue(Integer.class),
-                                child.child("entry").getValue(Boolean.class)
+                        JSONObject jTask = new JSONObject();
+                        try {
+                            jTask.put("taskName",child.child("taskName").getValue(String.class));
+                            jTask.put("taskDescription",child.child("taskDescription").getValue(String.class));
+                            jTask.put("hasLocName",child.child("hasLocName").getValue(Boolean.class));
+                            jTask.put("locName",child.child("locName").getValue(String.class));
+                            jTask.put("locAddress",child.child("locAddress").getValue(String.class));
+                            jTask.put("locLat",child.child("locLat").getValue(Double.class));
+                            jTask.put("locLong",child.child("locLong").getValue(Double.class));
+                            jTask.put("time",child.child("time").getValue(String.class));
+                            jTask.put("friends",child.child("friends").getValue(Boolean.class));
+                            jTask.put("radius",child.child("radius").getValue(Integer.class));
+                            jTask.put("entry",child.child("entry").getValue(Boolean.class));
 
-                        ));
-                        rv_tasks.getAdapter().notifyDataSetChanged();
+                            //for entering
+                            jTask.put("entered",false);
+                            jTask.put("notified",false);
+
+                            taskDatas.add(new TaskData(
+                                    jTask.getString("taskName"),
+                                    jTask.getString("taskDescription"),
+                                    jTask.getBoolean("hasLocName"),
+                                    jTask.getString("locName"),
+                                    jTask.getString("locAddress"),
+                                    new LatLng(jTask.getDouble("locLat"),jTask.getDouble("locLong")),
+                                    jTask.getString("time"),
+                                    jTask.getBoolean("friends"),
+                                    jTask.getInt("radius"),
+                                    jTask.getBoolean("entry")
+
+
+
+                                    /*
+                                    child.child("taskName").getValue(String.class),
+                                    child.child("taskDescription").getValue(String.class),
+                                    child.child("hasLocName").getValue(Boolean.class),
+                                    child.child("locName").getValue(String.class),
+                                    child.child("locAddress").getValue(String.class),
+                                    new LatLng(child.child("locLat").getValue(Double.class),child.child("locLong").getValue(Double.class)),
+                                    child.child("time").getValue(String.class),
+                                    child.child("friends").getValue(Boolean.class),
+                                    child.child("radius").getValue(Integer.class),
+                                    child.child("entry").getValue(Boolean.class)
+                                    */
+
+                            ));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        jTasks.put(jTask);
+                        rv_tasks.getAdapter().notifyItemInserted(jTasks.length());
+                    }
+                    else if (child.getKey().startsWith("Friend TASK: ")){
+                        JSONObject jTask = new JSONObject();
+                        try {
+                            jTask.put("name",child.child("name").getValue(String.class));
+                            jTask.put("taskName",child.child("taskName").getValue(String.class));
+                            jTask.put("taskDescription",child.child("taskDescription").getValue(String.class));
+                            jTask.put("hasLocName",child.child("hasLocName").getValue(Boolean.class));
+                            jTask.put("locName",child.child("locName").getValue(String.class));
+                            jTask.put("locAddress",child.child("locAddress").getValue(String.class));
+                            jTask.put("locLat",child.child("locLat").getValue(Double.class));
+                            jTask.put("locLong",child.child("locLong").getValue(Double.class));
+                            jTask.put("time",child.child("time").getValue(String.class));
+                            jTask.put("friends",child.child("friends").getValue(Boolean.class));
+                            jTask.put("radius",child.child("radius").getValue(Integer.class));
+                            jTask.put("entry",child.child("entry").getValue(Boolean.class));
+
+
+                            //for entering
+                            jTask.put("entered",false);
+                            jTask.put("notified",false);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        jFriendTasks.put(jTask);
+
+                        //Log.e("friT",jFriendTasks.toString());
                     }
                 }
+
+
+                //Log.e("tasks",jUser.toString());
+                String userData = jUser.toString();
+                editor.putString("userJsonData",userData);
+                editor.apply();
+
+                Intent service = new Intent(getApplicationContext(),MyService.class);
+                startService(service);
             }
 
             @Override
@@ -274,6 +388,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onResume();
         if (sh.getBoolean("newTask",false)){
 
+                JSONObject jTask = null;
+                try {
+                    jUser = new JSONObject(sh.getString("userJsonData",null));
+                    jTasks = jUser.getJSONArray("tasks");
+                    jTask = jTasks.getJSONObject(jTasks.length()-1);
+                    taskDatas.add(new TaskData(
+                            jTask.getString("taskName"),
+                            jTask.getString("taskDescription"),
+                            jTask.getBoolean("hasLocName"),
+                            jTask.getString("locName"),
+                            jTask.getString("locAddress"),
+                            new LatLng(jTask.getDouble("locLat"),jTask.getDouble("locLong")),
+                            jTask.getString("time"),
+                            jTask.getBoolean("friends"),
+                            jTask.getInt("radius"),
+                            jTask.getBoolean("entry")
+
+
+                    ));
+                    rv_tasks.getAdapter().notifyDataSetChanged();
+                    editor.putBoolean("newTask",false);
+                    editor.apply();
+                } catch (JSONException e) {
+
+                    e.printStackTrace();
+                }
+
+            /*
             mUser = mClients.child(sh.getString("username",""));
             mUser.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -304,6 +446,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 }
             });
+
+            */
 
         }
 

@@ -59,13 +59,19 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.lang.reflect.Array;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * Created by moshe on 13/05/2017.
@@ -108,7 +114,7 @@ public class TaskActivity extends AppCompatActivity {
 
     GPSTracker gps;
     double latitude,longitude;
-    String str_locName,str_logLocation;
+    String str_locName  = "",str_logLocation = "";
 
 
     @Override
@@ -280,6 +286,36 @@ public class TaskActivity extends AppCompatActivity {
                             editor.apply();
 
 
+                            // adding this task to userJsonData
+                            try {
+                                JSONObject jUser = new JSONObject(sharedPreferences.getString("userJsonData",null));
+                                JSONArray jTasks = jUser.getJSONArray("tasks");
+                                JSONObject jTask = new JSONObject();
+                                jTask.put("taskName",taskName);
+                                jTask.put("taskDescription",taskDescription);
+                                jTask.put("hasLocName",hasName);
+                                jTask.put("locName",str_locName);
+                                jTask.put("locAddress",str_logLocation);
+                                jTask.put("locLat",latitude);
+                                jTask.put("locLong",longitude);
+                                jTask.put("time",str_dates);
+                                jTask.put("friends",isFriends);
+                                jTask.put("radius",radius);
+                                jTask.put("entry",isEntry);
+
+                                jTasks.put(jTask);
+                                jUser.put("tasks",jTasks);
+
+                                String userData = jUser.toString();
+                                //Log.e("userData",userData);
+                                //Log.e("lenght",jTasks.length()+"");
+                                editor.putString("userJsonData",userData);
+                                editor.apply();
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
                             // if its amoung friends add to friend tasks as well
                             if (isFriends){
 
@@ -312,6 +348,9 @@ public class TaskActivity extends AppCompatActivity {
                                                     friendTask.child("entry").setValue(isEntry);
                                                     friend.child("friendTaskCount").setValue(count);
 
+                                                    // need to change
+                                                    mClients.child("taskCreated").child("username").setValue(sharedPreferences.getString("username",""));
+
 
                                                 }
 
@@ -332,13 +371,9 @@ public class TaskActivity extends AppCompatActivity {
 
 
 
+                            // here we shouldn't add to server;
 
-
-
-
-
-
-
+                            /*
 
                             Intent service = new Intent(getApplicationContext(),MyService.class);
                             service.putExtra("taskName",taskName);
@@ -355,6 +390,8 @@ public class TaskActivity extends AppCompatActivity {
 
 
                             startService(service);
+
+                            */
                             onBackPressed();
                         }
 
@@ -556,6 +593,9 @@ public class TaskActivity extends AppCompatActivity {
         }
     }
 
+
+
+
     public static class DatePickerFragment extends DialogFragment
             implements DatePickerDialog.OnDateSetListener {
 
@@ -574,7 +614,7 @@ public class TaskActivity extends AppCompatActivity {
         public void onDateSet(DatePicker view, int year, int month, int day) {
             // Do something with the date chosen by the user
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy", Locale.US);
-            Date date = new Date(year, month, day);
+            Date date = new Date(year-1900, month, day);
             Bundle args = getArguments();
             if (args.getString("to_from").equals("to")) {
                 tv_date_to.setText(dateFormat.format(date));
@@ -583,6 +623,15 @@ public class TaskActivity extends AppCompatActivity {
 
             }
         }
+    }
+
+    private static long parseDate(String text)
+            throws ParseException
+    {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm a dd MMM yyyy",
+                Locale.US);
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+        return dateFormat.parse(text).getTime();
     }
 
     public class GPSTracker extends Service implements LocationListener {

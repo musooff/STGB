@@ -10,8 +10,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Name"
-        android:visibility="gone"
+        android:text="Friend Name"
         android:textSize="20sp"
         android:id="@+id/tv_name"
         android:layout_marginTop="20dp"/>
@@ -129,8 +128,8 @@
                         android:textColor="#151515"
                         android:textSize="18sp"/>
 
-                    </LinearLayout>
                 </LinearLayout>
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -190,29 +189,6 @@
                         android:textColor="#151515"/>
                 </LinearLayout>
             </LinearLayout>
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/rl_message"
-                android:visibility="gone"
-                android:orientation="horizontal">
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_toLeftOf="@+id/iv_send"
-                    android:layout_height="wrap_content">
-                    <android.support.design.widget.TextInputEditText
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:hint="Message your friend that you are bringing" />
-                </android.support.design.widget.TextInputLayout>
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:id="@+id/iv_send"
-                    android:layout_alignParentRight="true"
-                    android:src="@drawable/ic_menu_send"/>
-            </RelativeLayout>
 
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>

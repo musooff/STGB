@@ -41,6 +41,7 @@ public class SplashActivity extends Activity {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     str_username[0] = sharedPreferences.getString("username","");
                     str_pass[0] = sharedPreferences.getString("password","");
+                    int found = 0;
 
                     if (str_username[0].equals("") || str_pass[0].equals("")){
                         Toast.makeText(getApplicationContext(),"Please, enter appropriate information",Toast.LENGTH_SHORT).show();
@@ -48,6 +49,7 @@ public class SplashActivity extends Activity {
                     else {
                         for (DataSnapshot username : dataSnapshot.getChildren()){
                             if (username.getKey().equals(str_username[0])){
+                                found +=1;
                                 String pass = username.child("password").getValue(String.class);
                                 if (str_pass[0].equals(pass)){
                                     Intent main = new Intent(getApplicationContext(),MainActivity.class);
@@ -58,12 +60,13 @@ public class SplashActivity extends Activity {
                                     Toast.makeText(getApplicationContext(),"Username or password is incorrect",Toast.LENGTH_SHORT).show();
 
                                 }
-                            }
-                            else {
-                                Toast.makeText(getApplicationContext(),"Username is not found",Toast.LENGTH_SHORT).show();
-
+                                break;
                             }
                         }
+                        if(!(found == 1)){
+                            Toast.makeText(getApplicationContext(),"Username not found",Toast.LENGTH_SHORT).show();
+                        }
+
                     }
                 }
 
