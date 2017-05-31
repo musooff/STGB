@@ -174,6 +174,9 @@ public class MyService extends Service
                 }
             }
 
+            String userData = jUser.toString();
+            editor.putString("userJsonData",userData);
+            editor.apply();
 
 
             /*

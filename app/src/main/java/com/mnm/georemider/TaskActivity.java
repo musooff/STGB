@@ -348,7 +348,8 @@ public class TaskActivity extends AppCompatActivity {
                                                     friendTask.child("entry").setValue(isEntry);
                                                     friend.child("friendTaskCount").setValue(count);
 
-                                                    //mClients.child("taskCreated").child(sharedPreferences.getString("username","")).setValue(sharedPreferences.getString("username",""));
+                                                    // need to change
+                                                    mClients.child("taskCreated").child("username").setValue(sharedPreferences.getString("username",""));
 
 
                                                 }

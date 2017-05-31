@@ -58,7 +58,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 Toast.makeText(MyFirebaseMessagingService.this, "One of your friend shared new task with you", Toast.LENGTH_LONG).show();
                 //when message received just get last added task from the friend tasks and add to phone jUserData
 
-                /*
+
                 sharedPreferences = getSharedPreferences("TaskData",0);
                 editor = sharedPreferences.edit();
                 editor.apply();
@@ -112,9 +112,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
-
-                */
 
             }
         });
