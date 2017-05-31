@@ -45,21 +45,13 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAmM7N3Lu8tK18sJ1z_mkE8jcM1RCWWuRA" />
 
-        <activity android:name=".Register"></activity>
-        <service android:name=".MyService" android:process=":my_service" />
-        <activity android:name=".EachTask"/>
-        <service
-            android:name=".MyFirebaseMessagingService">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
-            </intent-filter>
-        </service>
-        <service
-            android:name=".MyFirebaseInstanceIDService">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
-            </intent-filter>
-        </service>
+        <activity android:name=".register" />
+        <activity android:name=".Register" />
+        <activity android:name=".AddingFriend" />
+        <activity android:name=".Adding_friend_item" />
+        <activity android:name=".Adding_friend_content" />
+        <activity android:name=".Friend_request" />
+        <activity android:name=".Friend_reqest_items"></activity>
     </application>
 
 </manifest>

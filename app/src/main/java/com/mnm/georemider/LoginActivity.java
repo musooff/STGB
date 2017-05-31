@@ -95,11 +95,8 @@ public class LoginActivity extends AppCompatActivity {
 
                                     }
                                 }
-                                else {
-                                    Toast.makeText(getApplicationContext(),"Username is not found",Toast.LENGTH_SHORT).show();
-
-                                }
                             }
+                            //Toast.makeText(getApplicationContext(),"Username is not found",Toast.LENGTH_SHORT).show();
                         }
                     }
 

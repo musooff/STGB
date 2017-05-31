@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:id="@+id/rv_friends"
+        android:background="?android:attr/selectableItemBackground"
         tools:layout_editor_absoluteY="0dp"
         tools:layout_editor_absoluteX="8dp">
     </android.support.v7.widget.RecyclerView>

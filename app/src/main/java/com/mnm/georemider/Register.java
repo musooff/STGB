@@ -77,7 +77,8 @@ public class Register extends AppCompatActivity {
 
                                        // Adding device token for firebase messaging
                                        mUser.child("deviceToken").setValue(sharedPreferences.getString("deviceToken",""));
-
+                                       DatabaseReference req_friend = mClients.child("Request_Friend");
+                                       req_friend.child(str_username[0]).setValue("");
                                        Intent login = new Intent(getApplicationContext(),LoginActivity.class);
                                        startActivity(login);
                                        finish();
