@@ -43,7 +43,7 @@
                             app:cardCornerRadius="32dp">
 
                             <ImageView
-                                android:id="@+id/iv_user"
+                                android:id="@+id/image_pro_user"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:src="@drawable/simple_user_image" />
@@ -59,7 +59,7 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/tv_name"
+                        android:id="@+id/friend_req_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
@@ -69,7 +69,7 @@
                         android:textSize="20sp" />
 
                     <TextView
-                        android:id="@+id/tv_username"
+                        android:id="@+id/friend_req_username"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
@@ -83,7 +83,7 @@
                         android:layout_height="match_parent">
 
                         <Button
-                            android:id="@+id/add_friend"
+                            android:id="@+id/friend_req_add_friend"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
@@ -93,7 +93,7 @@
                             android:textSize="8sp" />
 
                         <Button
-                            android:id="@+id/reject_friend"
+                            android:id="@+id/friend_req_reject_friend"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Reject"

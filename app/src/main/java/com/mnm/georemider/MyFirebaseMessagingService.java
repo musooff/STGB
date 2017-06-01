@@ -1,13 +1,22 @@
 package com.mnm.georemider;
 
 import android.app.Activity;
+import android.app.Application;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.support.v4.app.NotificationBuilderWithBuilderAccessor;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -40,15 +49,51 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // If the application is in the foreground handle both data and notification messages here.
         // Also if you intend on generating your own notifications as a result of a received FCM
         // message, here is where that should be initiated.
+        //Log.d(TAG, "From: " + remoteMessage.getFrom());
+        // TODO(developer): Handle FCM messages here.
+        // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
         Log.d(TAG, "From: " + remoteMessage.getFrom());
-        message = remoteMessage.getNotification().getBody();
-        Log.d(TAG, "Notification Message Body: " + message);
-        try {
-            runa();
-        } catch (Exception e) {
-            e.printStackTrace();
+
+        // Check if message contains a data payload.
+        if (remoteMessage.getData().size() > 0) {
+            Log.d(TAG, "Message data payload: " + remoteMessage.getData());
+
+            if (/* Check if data needs to be processed by long running job */ true) {
+                // For long-running tasks (10 seconds or more) use Firebase Job Dispatcher.
+            } else {
+
+            }
+
         }
 
+        // Check if message contains a notification payload.
+        if (remoteMessage.getNotification() != null) {
+            if(remoteMessage.getNotification().getTitle().equals("request_friend")){
+                String to = remoteMessage.getNotification().getBody();
+                String from =remoteMessage.getNotification().getSound();
+                if(!from.equals("")){
+                    NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+                    builder.setSmallIcon(R.drawable.icon_friends);
+                    sharedPreferences = getSharedPreferences("TaskData",0);
+                    editor = sharedPreferences.edit();
+                    editor.putString("request_friend",from);
+                    editor.apply();
+                    builder.setContentTitle("Friend Request");
+                    builder.setContentText("You have friend request from: "+from);
+                    Intent friend_req = new Intent(this,Friend_request.class);
+                    TaskStackBuilder stackbuilder = TaskStackBuilder.create(this);
+                    stackbuilder.addParentStack(Friend_reqest_items.class);
+                    stackbuilder.addNextIntent(friend_req);
+                    PendingIntent pedding = stackbuilder.getPendingIntent(0,PendingIntent.FLAG_UPDATE_CURRENT);
+                    builder.setContentIntent(pedding);
+                    NotificationManager NM = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                    NM.notify(0,builder.build());
+                }
+                else{
+                    Log.d("Friend Request Name: ","Empty");
+                }
+            }
+        }
 
     }
     public void  runa() throws Exception{
