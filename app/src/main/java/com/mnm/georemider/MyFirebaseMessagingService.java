@@ -1,6 +1,7 @@
 package com.mnm.georemider;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Looper;
@@ -43,14 +44,36 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Log.d(TAG, "From: " + remoteMessage.getFrom());
         message = remoteMessage.getNotification().getBody();
         Log.d(TAG, "Notification Message Body: " + message);
-        try {
-            runa();
-        } catch (Exception e) {
-            e.printStackTrace();
+
+        if (message.equals("chatting")){
+            String title = remoteMessage.getNotification().getTitle();
+            String action_click = remoteMessage.getNotification().getClickAction();
+            openChatting(title,action_click);
         }
 
 
+        else {
+            try {
+                runa();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+
+
     }
+
+    private void openChatting(String title,String click_action) {
+        Intent chatting = new Intent();
+        chatting.setAction(click_action);
+        //chatting.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        chatting.putExtra("toWhom",title);
+        chatting.putExtra("message","chillin");
+        chatting.putExtra("coming","notification");
+        startActivity(chatting);
+    }
+
     public void  runa() throws Exception{
         mHandler.post(new Runnable() {
             @Override
