@@ -138,6 +138,9 @@ public class AddingFriend extends AppCompatActivity {
                                 friend_req_exits = friend_req_exits + "," + sharedPreferences.getString("username","0");
                             }*/
                             mUser.child(req_friend).setValue(req_friend);
+                            //DataSnapshot friend_request = dataSnapshot.child(req_friend);
+                            String friend_req_exits = sharedPreferences.getString("username","0");
+                            mUser.child(req_friend).setValue(friend_req_exits);
                             Intent friends = new Intent(getApplicationContext(),Friends.class);
                             startActivity(friends);
                             finish();

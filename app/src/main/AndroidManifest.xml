@@ -72,7 +72,26 @@
         <activity android:name=".Adding_friend_item" />
         <activity android:name=".Adding_friend_content" />
         <activity android:name=".Friend_request" />
+        <activity android:name=".Register"></activity>
+        <activity android:name=".AddingFriend"></activity>
+        <activity android:name=".Adding_friend_item"></activity>
+        <activity android:name=".Adding_friend_content"></activity>
         <activity android:name=".Friend_reqest_items"></activity>
+        <activity android:name=".Friend_request"></activity>
+        <service android:name=".MyService" android:process=":my_service" />
+        <activity android:name=".EachTask"/>
+        <service
+            android:name=".MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+        <service
+            android:name=".MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>
