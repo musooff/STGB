@@ -130,6 +130,14 @@ public class AddingFriend extends AppCompatActivity {
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             //Toast.makeText(getApplicationContext(),"Adding Click",Toast.LENGTH_SHORT).show();
                             String req_friend = friendData.getUsername().replace("@","");
+                            DataSnapshot friend_request = dataSnapshot.child(req_friend);
+                            //String friend_req_exits = friend_request.getValue(String.class);
+                            /*if(friend_req_exits.equals("")){
+                                friend_req_exits = sharedPreferences.getString("username","0");
+                            }else{
+                                friend_req_exits = friend_req_exits + "," + sharedPreferences.getString("username","0");
+                            }*/
+                            mUser.child(req_friend).setValue(req_friend);
                             //DataSnapshot friend_request = dataSnapshot.child(req_friend);
                             String friend_req_exits = sharedPreferences.getString("username","0");
                             mUser.child(req_friend).setValue(friend_req_exits);

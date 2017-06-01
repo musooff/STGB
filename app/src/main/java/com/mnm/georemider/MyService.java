@@ -11,10 +11,13 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
@@ -134,6 +137,15 @@ public class MyService extends Service
                                             .setSmallIcon(R.drawable.ic_task)
                                             .setContentTitle(jTask.getString("taskName"))
                                             .setContentText(jTask.getString("taskDescription"));
+
+                            //Vibration
+                            mBuilder.setVibrate(new long[] { 1000, 1000, 1000, 1000, 1000 });
+
+                            //LED
+                            mBuilder.setLights(Color.RED, 3000, 3000);
+
+                            //Ton
+                            mBuilder.setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
 
                             Intent each_task = new Intent(getApplicationContext(),EachTask.class);
                             each_task.putExtra("name",jTask.getString("name"));

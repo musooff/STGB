@@ -72,6 +72,7 @@ public class Register extends AppCompatActivity {
                                        mUser.child("name").setValue(last_name[0]+" "+first_name[0]);
                                        mUser.child("password").setValue(str_pass[0]);
                                        mUser.child("taskCount").setValue(0);
+                                       mUser.child("friendTaskCount").setValue(0);
                                        mUser.child("friendsIDs").setValue("");
                                        mUser.child("friendNames").setValue("");
 
