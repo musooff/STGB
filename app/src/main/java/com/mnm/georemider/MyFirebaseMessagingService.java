@@ -151,11 +151,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         each_task.putExtra("toWhom",title);
         each_task.putExtra("message","chillin");
         each_task.putExtra("coming","notification");
-        startActivity(each_task);
+        each_task.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
+                Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent intent = PendingIntent.getActivity(getApplicationContext(), 0, each_task, PendingIntent.FLAG_UPDATE_CURRENT);
         mBuilder.setContentIntent(intent);
         mBuilder.setAutoCancel(true);
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        startActivity(each_task);
 
         // notificationID allows you to update the notification later on.
         mNotificationManager.notify(0, mBuilder.build());
