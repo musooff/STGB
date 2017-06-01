@@ -140,6 +140,8 @@ public class Friend_request extends AppCompatActivity {
                             reqfrindIDs = reqfrindIDs + "," + user;
                             mFriend.child(user).child("friendsIDs").setValue(userfrindIDs);
                             mFriend.child(req_friend).child("friendsIDs").setValue(reqfrindIDs);
+                            //mFriend.child("Reqeust_Friend").child(req_friend).setValue("");
+                            mFriend.child("Request_Friend").child(user).setValue("default");
                             Intent friends = new Intent(getApplicationContext(),Friends.class);
                             startActivity(friends);
                             finish();
@@ -156,13 +158,13 @@ public class Friend_request extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
 
-                    mUser.addListenerForSingleValueEvent(new ValueEventListener() {
+                    mFriend.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            String req_friend = sharedPreferences.getString("request_friend","0");
+                            //String req_friend = sharedPreferences.getString("request_friend","0");
                             String user = sharedPreferences.getString("username","");
-                            mUser.child("Reqeust_Friend").child(req_friend).setValue("");
-                            mUser.child("Request_Friend").child(user).setValue("");
+                            //mFriend.child("Reqeust_Friend").child(req_friend).setValue("");
+                            mFriend.child("Request_Friend").child(user).setValue("default");
                             Intent friends = new Intent(getApplicationContext(),Friends.class);
                             startActivity(friends);
                             finish();

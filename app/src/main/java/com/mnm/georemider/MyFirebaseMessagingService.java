@@ -96,7 +96,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             if(remoteMessage.getNotification().getTitle().equals("request_friend")){
                 String to = remoteMessage.getNotification().getBody();
                 String from =remoteMessage.getNotification().getSound();
-                if(!from.equals("")){
+                    if(!from.equals("default")){
                     NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
                     builder.setSmallIcon(R.drawable.icon_friends);
                     sharedPreferences = getSharedPreferences("TaskData",0);
@@ -111,6 +111,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     stackbuilder.addNextIntent(friend_req);
                     PendingIntent pedding = stackbuilder.getPendingIntent(0,PendingIntent.FLAG_UPDATE_CURRENT);
                     builder.setContentIntent(pedding);
+                    builder.setAutoCancel(true);
                     NotificationManager NM = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                     NM.notify(0,builder.build());
                 }
@@ -148,9 +149,17 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         mBuilder.setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
 
         Intent each_task = new Intent(getApplicationContext(),ChatActivity.class);
-        each_task.putExtra("toWhom",title);
-        each_task.putExtra("message","chillin");
-        each_task.putExtra("coming","notification");
+        //each_task.putExtra("toWhom",title);
+        //each_task.putExtra("message","chillin");
+        //each_task.putExtra("coming","notification");
+        //each_task.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+        sharedPreferences = getSharedPreferences("TaskData",0);
+        editor = sharedPreferences.edit();
+        editor.putString("coming","notification");
+        editor.putString("toWhom",title);
+        editor.putString("message","chillin");
+        editor.apply();
         startActivity(each_task);
         PendingIntent intent = PendingIntent.getActivity(getApplicationContext(), 0, each_task, PendingIntent.FLAG_UPDATE_CURRENT);
         mBuilder.setContentIntent(intent);
@@ -167,7 +176,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(MyFirebaseMessagingService.this, "One of your friend shared new task with you", Toast.LENGTH_LONG).show();
+                //Toast.makeText(MyFirebaseMessagingService.this, "One of your friend shared new task with you", Toast.LENGTH_LONG).show();
                 //when message received just get last added task from the friend tasks and add to phone jUserData
 
 
