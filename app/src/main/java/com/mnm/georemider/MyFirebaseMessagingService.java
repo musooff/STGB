@@ -1,11 +1,17 @@
 package com.mnm.georemider;
 
 import android.app.Activity;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.provider.Settings;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -65,13 +71,44 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     private void openChatting(String title,String click_action) {
-        Intent chatting = new Intent();
+
+        /*Intent chatting = new Intent();
         chatting.setAction(click_action);
         //chatting.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         chatting.putExtra("toWhom",title);
         chatting.putExtra("message","chillin");
         chatting.putExtra("coming","notification");
         startActivity(chatting);
+        */
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(getApplicationContext())
+                        .setSmallIcon(R.drawable.ic_task)
+                        .setContentTitle("New message")
+                        .setContentText(title);
+
+        //Vibration
+        mBuilder.setVibrate(new long[] { 1000, 1000, 1000, 1000, 1000 });
+
+        //LED
+        mBuilder.setLights(Color.RED, 3000, 3000);
+
+        //Ton
+        mBuilder.setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
+
+        Intent each_task = new Intent(getApplicationContext(),ChatActivity.class);
+        each_task.putExtra("toWhom",title);
+        each_task.putExtra("message","chillin");
+        each_task.putExtra("coming","notification");
+        startActivity(each_task);
+        PendingIntent intent = PendingIntent.getActivity(getApplicationContext(), 0, each_task, PendingIntent.FLAG_UPDATE_CURRENT);
+        mBuilder.setContentIntent(intent);
+        mBuilder.setAutoCancel(true);
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        // notificationID allows you to update the notification later on.
+        mNotificationManager.notify(0, mBuilder.build());
+
+
     }
 
     public void  runa() throws Exception{
