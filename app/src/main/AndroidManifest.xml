@@ -66,6 +66,13 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity android:name=".register" />
+        <activity android:name=".Register" />
+        <activity android:name=".AddingFriend" />
+        <activity android:name=".Adding_friend_item" />
+        <activity android:name=".Adding_friend_content" />
+        <activity android:name=".Friend_request" />
+        <activity android:name=".Friend_reqest_items"></activity>
     </application>
 
 </manifest>

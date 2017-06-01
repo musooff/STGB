@@ -18,6 +18,7 @@ package com.mnm.georemider;
 
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -62,5 +63,6 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("deviceToken",token);
         editor.apply();
+        //Toast.makeText(getApplicationContext(),"deviceTOken: "+token,Toast.LENGTH_SHORT).show();
     }
 }
