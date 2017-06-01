@@ -66,8 +66,9 @@ public class Friend_request extends AppCompatActivity {
                 Log.d("After Firebase: ",frindNames);
                 Log.d("After Firebase ID:",req_friend);
                 if(frindNames != null){
+                    Log.d("Adding Start","Friend");
                     friendsDatas.add(new FriendsData(frindNames, "@" + frindIDs));
-                    rv_friends.getAdapter().notifyItemInserted(1);
+                    rv_friends.getAdapter().notifyDataSetChanged();
                 }
                 else{
                     Toast.makeText(getApplicationContext(),"Username not found!!!",Toast.LENGTH_SHORT).show();
@@ -107,7 +108,7 @@ public class Friend_request extends AppCompatActivity {
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
             View adItemLayoutView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.activity_friend_request, parent, false);
+                    .inflate(R.layout.activity_friend_reqest_items, parent, false);
             return new Friend_request.FriendAdapter.FriendViewHolder(adItemLayoutView);
         }
 
