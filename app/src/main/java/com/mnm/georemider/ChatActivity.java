@@ -10,6 +10,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -139,32 +140,35 @@ public class ChatActivity extends Activity {
                 // Read the input field and push a new instance
                 // of ChatMessage to the Firebase database
                 //newMessage(input.getText().toString());
-                mMessageCount.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        long messageCount = 1;
-                        if (!dataSnapshot.exists()){
-                            mMessageCount.setValue(1);
+                if (input.getText().toString()!=""){
+                    mMessageCount.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            long messageCount = 1;
+                            if (!dataSnapshot.exists()){
+                                mMessageCount.setValue(1);
+                            }
+                            else {
+                                messageCount = dataSnapshot.getValue(Long.class);
+                                messageCount++;
+                                mMessageCount.setValue(messageCount);
+                            }
+
+                            mCHAT.child("MESSAGE "+ messageCount).child("from").setValue(username);
+                            mCHAT.child("MESSAGE "+ messageCount).child("to").setValue(toWhom);
+                            mCHAT.child("MESSAGE "+ messageCount).child("message").setValue(input.getText().toString());
+                            mCHAT.child("MESSAGE "+ messageCount).child("time").setValue(ServerValue.TIMESTAMP);
+
+                            input.setText("");
+
                         }
-                        else {
-                            messageCount = dataSnapshot.getValue(Long.class);
-                            messageCount++;
-                            mMessageCount.setValue(messageCount);
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
                         }
-
-                        mCHAT.child("MESSAGE "+ messageCount).child("from").setValue(username);
-                        mCHAT.child("MESSAGE "+ messageCount).child("to").setValue(toWhom);
-                        mCHAT.child("MESSAGE "+ messageCount).child("message").setValue(input.getText().toString());
-                        mCHAT.child("MESSAGE "+ messageCount).child("time").setValue(ServerValue.TIMESTAMP);
-
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
+                    });
+                }
                 
             }
         });

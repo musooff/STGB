@@ -136,22 +136,16 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         mBuilder.setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
 
         Intent each_task = new Intent(getApplicationContext(),ChatActivity.class);
-        //each_task.putExtra("toWhom",title);
-        //each_task.putExtra("message","chillin");
-        //each_task.putExtra("coming","notification");
-        //each_task.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-
-        sharedPreferences = getSharedPreferences("TaskData",0);
-        editor = sharedPreferences.edit();
-        editor.putString("coming","notification");
-        editor.putString("toWhom",title);
-        editor.putString("message","chillin");
-        editor.apply();
-        startActivity(each_task);
+        each_task.putExtra("toWhom",title);
+        each_task.putExtra("message","chillin");
+        each_task.putExtra("coming","notification");
+        each_task.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
+                Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent intent = PendingIntent.getActivity(getApplicationContext(), 0, each_task, PendingIntent.FLAG_UPDATE_CURRENT);
         mBuilder.setContentIntent(intent);
         mBuilder.setAutoCancel(true);
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        startActivity(each_task);
 
         // notificationID allows you to update the notification later on.
         mNotificationManager.notify(0, mBuilder.build());
@@ -163,7 +157,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                //Toast.makeText(MyFirebaseMessagingService.this, "One of your friend shared new task with you", Toast.LENGTH_LONG).show();
+                Toast.makeText(MyFirebaseMessagingService.this, "One of your friend shared new task with you", Toast.LENGTH_LONG).show();
                 //when message received just get last added task from the friend tasks and add to phone jUserData
 
 
