@@ -8,7 +8,7 @@
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
         android:layout_margin="10dp"
         app:cardCornerRadius="10dp"
         app:cardElevation="4dp">
@@ -86,11 +86,11 @@
                             android:id="@+id/friend_req_add_friend"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:layout_alignParentRight="true"
+                            android:text="Accept"
+                            android:textSize="8sp"
                             android:layout_alignParentTop="true"
-                            android:text="Add"
-                            android:textSize="8sp" />
+                            android:layout_toLeftOf="@+id/friend_req_reject_friend"
+                            android:layout_toStartOf="@+id/friend_req_reject_friend" />
 
                         <Button
                             android:id="@+id/friend_req_reject_friend"
@@ -99,8 +99,8 @@
                             android:text="Reject"
                             android:textSize="8sp"
                             android:layout_alignParentTop="true"
-                            android:layout_toLeftOf="@+id/add_friend"
-                            android:layout_toStartOf="@+id/add_friend" />
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentEnd="true" />
                     </RelativeLayout>
 
 

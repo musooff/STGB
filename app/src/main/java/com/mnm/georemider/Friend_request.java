@@ -134,12 +134,35 @@ public class Friend_request extends AppCompatActivity {
                             //DataSnapshot friend_request = dataSnapshot.child(req_friend);
                             DataSnapshot userFriendIDs = dataSnapshot.child(user).child("friendsIDs");
                             DataSnapshot reqFriendIDs = dataSnapshot.child(req_friend).child("friendsIDs");
+                            DataSnapshot userFriendName = dataSnapshot.child(user).child("friendNames");
+                            DataSnapshot reqFriendName = dataSnapshot.child(req_friend).child("friendNames");
+                            DataSnapshot username = dataSnapshot.child(user).child("name");
+                            DataSnapshot reqname = dataSnapshot.child(req_friend).child("name");
                             String userfrindIDs = userFriendIDs.getValue(String.class);
                             String reqfrindIDs = reqFriendIDs.getValue(String.class);
-                            userfrindIDs = userfrindIDs + "," + req_friend;
-                            reqfrindIDs = reqfrindIDs + "," + user;
+                            String userFriendNames = userFriendName.getValue(String.class);
+                            String reqFriendNames = reqFriendName.getValue(String.class);
+                            String userName = username.getValue(String.class);
+                            String reqName = reqname.getValue(String.class);
+                            if(userfrindIDs.equals("")){
+                                userfrindIDs = req_friend;
+                                userFriendNames = reqName;
+                            }else{
+                                userfrindIDs = userfrindIDs + "," + req_friend;
+                                userFriendNames = userFriendNames + "," +reqName;
+                            }
+                            if(reqfrindIDs.equals("")){
+                                reqfrindIDs = user;
+                                reqFriendNames = userName;
+                            }
+                            else{
+                                reqfrindIDs = reqfrindIDs + "," + user;
+                                reqFriendNames = reqFriendNames + "," + userName;
+                            }
                             mFriend.child(user).child("friendsIDs").setValue(userfrindIDs);
                             mFriend.child(req_friend).child("friendsIDs").setValue(reqfrindIDs);
+                            mFriend.child(user).child("friendNames").setValue(userFriendNames);
+                            mFriend.child(req_friend).child("friendNames").setValue(reqFriendNames);
                             //mFriend.child("Reqeust_Friend").child(req_friend).setValue("");
                             mFriend.child("Request_Friend").child(user).setValue("default");
                             Intent friends = new Intent(getApplicationContext(),Friends.class);
