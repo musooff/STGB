@@ -70,7 +70,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
 
 
-        else {
+        else if(message.equals("body")){
             try {
                 runa();
             } catch (Exception e) {
@@ -78,41 +78,29 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             }
         }
 
-
-        // Check if message contains a data payload.
-        if (remoteMessage.getData().size() > 0) {
-            Log.d(TAG, "Message data payload: " + remoteMessage.getData());
-
-            if (/* Check if data needs to be processed by long running job */ true) {
-                // For long-running tasks (10 seconds or more) use Firebase Job Dispatcher.
-            } else {
-
-            }
-
-        }
-
         // Check if message contains a notification payload.
-        if (remoteMessage.getNotification() != null) {
+        else if (remoteMessage.getNotification() != null) {
             if(remoteMessage.getNotification().getTitle().equals("request_friend")){
                 String to = remoteMessage.getNotification().getBody();
                 String from =remoteMessage.getNotification().getSound();
-                if(!from.equals("")){
-                    NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-                    builder.setSmallIcon(R.drawable.icon_friends);
-                    sharedPreferences = getSharedPreferences("TaskData",0);
-                    editor = sharedPreferences.edit();
-                    editor.putString("request_friend",from);
-                    editor.apply();
-                    builder.setContentTitle("Friend Request");
-                    builder.setContentText("You have friend request from: "+from);
-                    Intent friend_req = new Intent(this,Friend_request.class);
-                    TaskStackBuilder stackbuilder = TaskStackBuilder.create(this);
-                    stackbuilder.addParentStack(Friend_reqest_items.class);
-                    stackbuilder.addNextIntent(friend_req);
-                    PendingIntent pedding = stackbuilder.getPendingIntent(0,PendingIntent.FLAG_UPDATE_CURRENT);
-                    builder.setContentIntent(pedding);
-                    NotificationManager NM = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                    NM.notify(0,builder.build());
+                    if(!from.equals("default")){
+                        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+                        builder.setSmallIcon(R.drawable.icon_friends);
+                        sharedPreferences = getSharedPreferences("TaskData",0);
+                        editor = sharedPreferences.edit();
+                        editor.putString("request_friend",from);
+                        editor.apply();
+                        builder.setContentTitle("Friend Request");
+                        builder.setContentText("You have friend request from: "+from);
+                        Intent friend_req = new Intent(this,Friend_request.class);
+                        TaskStackBuilder stackbuilder = TaskStackBuilder.create(this);
+                        stackbuilder.addParentStack(Friend_reqest_items.class);
+                        stackbuilder.addNextIntent(friend_req);
+                        PendingIntent pedding = stackbuilder.getPendingIntent(0,PendingIntent.FLAG_UPDATE_CURRENT);
+                        builder.setContentIntent(pedding);
+                        builder.setAutoCancel(true);
+                        NotificationManager NM = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                        NM.notify(0,builder.build());
                 }
                 else{
                     Log.d("Friend Request Name: ","Empty");

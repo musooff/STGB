@@ -2,6 +2,7 @@ package com.mnm.georemider;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -9,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,15 +43,16 @@ public class Friends extends AppCompatActivity {
         Toolbar friend_toolbar = (Toolbar) findViewById(R.id.friend_toolbar);
         setSupportActionBar(friend_toolbar);
 
-        FloatingActionButton friend_fab = (FloatingActionButton) findViewById(R.id.friend_fab);
+        final FloatingActionButton friend_fab = (FloatingActionButton) findViewById(R.id.friend_fab);
         rv_friends = (RecyclerView) findViewById(R.id.rv_friends);
         friendsDatas = new ArrayList<>();
         FriendAdapter friendAdapter = new FriendAdapter(this, friendsDatas);
         rv_friends.setLayoutManager(new LinearLayoutManager(this));
         rv_friends.setAdapter(friendAdapter);
-
-
-        mUser = mClients.child("musooff");
+        SharedPreferences sharedPreferences;
+        sharedPreferences = getSharedPreferences("TaskData",0);
+        String username = sharedPreferences.getString("username","");
+        mUser = mClients.child(username);
         mUser.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -57,6 +60,7 @@ public class Friends extends AppCompatActivity {
                 DataSnapshot mFrindNames = dataSnapshot.child("friendNames");
                 String[] frindIDs = mFriendIDs.getValue(String.class).split(",");
                 String[] frindNames = mFrindNames.getValue(String.class).split(",");
+                Log.d("Friend Name:", Integer.toString(frindIDs.length));
                 for (int i = 0; i < frindIDs.length; i++) {
                     friendsDatas.add(new FriendsData(frindNames[i], "@" + frindIDs[i]));
                     rv_friends.getAdapter().notifyItemInserted(i);

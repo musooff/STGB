@@ -2,6 +2,7 @@ package com.mnm.georemider;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
@@ -68,9 +69,17 @@ public class EachTask extends Activity {
             @Override
             public void onClick(View v) {
                 Intent chat = new Intent(getApplicationContext(),ChatActivity.class);
-                chat.putExtra("toWhom",extras.getString("name"));
-                chat.putExtra("message",tv_message.getText().toString());
-                chat.putExtra("coming","private");
+                //chat.putExtra("toWhom",extras.getString("name"));
+                //chat.putExtra("message",tv_message.getText().toString());
+                //chat.putExtra("coming","private");
+                SharedPreferences sharedPreferences;
+                SharedPreferences.Editor editor;
+                sharedPreferences = getSharedPreferences("TaskData",0);
+                editor = sharedPreferences.edit();
+                editor.putString("coming","private");
+                editor.putString("toWhom",extras.getString("name"));
+                editor.putString("message",tv_message.getText().toString());
+                editor.apply();
                 startActivity(chat);
                 finish();
             }

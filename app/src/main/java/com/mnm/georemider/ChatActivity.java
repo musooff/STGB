@@ -58,8 +58,10 @@ public class ChatActivity extends Activity {
         username = sharedPreferences.getString("username","");
 
         final Bundle extras = getIntent().getExtras();
-        toWhom = extras.getString("toWhom");
-        String coming = extras.getString("coming");
+        //toWhom = extras.getString("toWhom");
+        //String coming = extras.getString("coming");
+        toWhom = sharedPreferences.getString("toWhom",null);
+        String coming = sharedPreferences.getString("coming",null);
         if (coming.equals("private")){
             mChatCount.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -69,7 +71,8 @@ public class ChatActivity extends Activity {
                     mChatCount.setValue(chatCount);
                     mCHAT = mChats.child("CHAT "+chatCount);
                     mMessageCount = mCHAT.child("messageCount");
-                    newMessage(extras.getString("message"));
+                    //newMessage(extras.getString("message"));
+                    newMessage(sharedPreferences.getString("message",null));
 
                 }
 

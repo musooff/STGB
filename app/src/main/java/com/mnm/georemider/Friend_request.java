@@ -66,8 +66,9 @@ public class Friend_request extends AppCompatActivity {
                 Log.d("After Firebase: ",frindNames);
                 Log.d("After Firebase ID:",req_friend);
                 if(frindNames != null){
+                    Log.d("Adding Start","Friend");
                     friendsDatas.add(new FriendsData(frindNames, "@" + frindIDs));
-                    rv_friends.getAdapter().notifyItemInserted(1);
+                    rv_friends.getAdapter().notifyDataSetChanged();
                 }
                 else{
                     Toast.makeText(getApplicationContext(),"Username not found!!!",Toast.LENGTH_SHORT).show();
@@ -107,7 +108,7 @@ public class Friend_request extends AppCompatActivity {
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
             View adItemLayoutView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.activity_friend_request, parent, false);
+                    .inflate(R.layout.activity_friend_reqest_items, parent, false);
             return new Friend_request.FriendAdapter.FriendViewHolder(adItemLayoutView);
         }
 
@@ -133,12 +134,37 @@ public class Friend_request extends AppCompatActivity {
                             //DataSnapshot friend_request = dataSnapshot.child(req_friend);
                             DataSnapshot userFriendIDs = dataSnapshot.child(user).child("friendsIDs");
                             DataSnapshot reqFriendIDs = dataSnapshot.child(req_friend).child("friendsIDs");
+                            DataSnapshot userFriendName = dataSnapshot.child(user).child("friendNames");
+                            DataSnapshot reqFriendName = dataSnapshot.child(req_friend).child("friendNames");
+                            DataSnapshot username = dataSnapshot.child(user).child("name");
+                            DataSnapshot reqname = dataSnapshot.child(req_friend).child("name");
                             String userfrindIDs = userFriendIDs.getValue(String.class);
                             String reqfrindIDs = reqFriendIDs.getValue(String.class);
-                            userfrindIDs = userfrindIDs + "," + req_friend;
-                            reqfrindIDs = reqfrindIDs + "," + user;
+                            String userFriendNames = userFriendName.getValue(String.class);
+                            String reqFriendNames = reqFriendName.getValue(String.class);
+                            String userName = username.getValue(String.class);
+                            String reqName = reqname.getValue(String.class);
+                            if(userfrindIDs.equals("")){
+                                userfrindIDs = req_friend;
+                                userFriendNames = reqName;
+                            }else{
+                                userfrindIDs = userfrindIDs + "," + req_friend;
+                                userFriendNames = userFriendNames + "," +reqName;
+                            }
+                            if(reqfrindIDs.equals("")){
+                                reqfrindIDs = user;
+                                reqFriendNames = userName;
+                            }
+                            else{
+                                reqfrindIDs = reqfrindIDs + "," + user;
+                                reqFriendNames = reqFriendNames + "," + userName;
+                            }
                             mFriend.child(user).child("friendsIDs").setValue(userfrindIDs);
                             mFriend.child(req_friend).child("friendsIDs").setValue(reqfrindIDs);
+                            mFriend.child(user).child("friendNames").setValue(userFriendNames);
+                            mFriend.child(req_friend).child("friendNames").setValue(reqFriendNames);
+                            //mFriend.child("Reqeust_Friend").child(req_friend).setValue("");
+                            mFriend.child("Request_Friend").child(user).setValue("default");
                             Intent friends = new Intent(getApplicationContext(),Friends.class);
                             startActivity(friends);
                             finish();
@@ -155,13 +181,13 @@ public class Friend_request extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
 
-                    mUser.addListenerForSingleValueEvent(new ValueEventListener() {
+                    mFriend.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            String req_friend = sharedPreferences.getString("request_friend","0");
+                            //String req_friend = sharedPreferences.getString("request_friend","0");
                             String user = sharedPreferences.getString("username","");
-                            mUser.child("Reqeust_Friend").child(req_friend).setValue("");
-                            mUser.child("Request_Friend").child(user).setValue("");
+                            //mFriend.child("Reqeust_Friend").child(req_friend).setValue("");
+                            mFriend.child("Request_Friend").child(user).setValue("default");
                             Intent friends = new Intent(getApplicationContext(),Friends.class);
                             startActivity(friends);
                             finish();
