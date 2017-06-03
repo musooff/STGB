@@ -81,7 +81,9 @@ public class MyService extends Service
                 try {
                     jTask = jTasks.getJSONObject(i);
                     dis = distance(location.getLatitude(),jTask.getDouble("locLat"),location.getLongitude(),jTask.getDouble("locLong"));
-                    if (dis <= jTask.getInt("radius") && !jTask.getBoolean("entered") && !jTask.getBoolean("notified")){
+                    Log.e("dis",dis+"");
+                    radius = (10)*jTask.getInt("radius");
+                    if (dis <= radius && !jTask.getBoolean("entered")){ // radius becomes within a range for the first time, notify user
                         NotificationCompat.Builder mBuilder =
                                 new NotificationCompat.Builder(getApplicationContext())
                                         .setSmallIcon(R.drawable.ic_task)
@@ -93,7 +95,7 @@ public class MyService extends Service
                         each_task.putExtra("taskDesc",jTask.getString("taskDescription"));
                         each_task.putExtra("locName",jTask.getString("locName"));
                         each_task.putExtra("locAddress",jTask.getString("locAddress"));
-                        each_task.putExtra("radius",jTask.getInt("radius"));
+                        each_task.putExtra("radius",(10)*jTask.getInt("radius"));
                         each_task.putExtra("time",jTask.getString("time"));
                         each_task.putExtra("entry",jTask.getBoolean("entry"));
                         each_task.putExtra("friends",jTask.getBoolean("friends"));
@@ -110,14 +112,18 @@ public class MyService extends Service
                         mNotificationManager.notify(0, mBuilder.build());
 
                         jTask.put("entered",true);
-                        jTask.put("notified",true);
+                        Log.e(TAG,"Notified");
+
                     }
-                    if (dis > radius ){
+                    else if (dis > radius && !jTask.getBoolean("entered")){  // dis gets outside the range but he wasn't at the location, He is chilling outside
+                        Log.e(TAG,"You are still outside");
+                    }
+                    else if (dis > radius && jTask.getBoolean("entered")){  // dis gets outside the range and he was at location, so mark him got out of location
                         jTask.put("entered",false);
-                        jTask.put("notified",false);
                         Log.e(TAG, "Exit");
 
                     }
+                    // else he is inside range and also has been notified, do nothing
 
 
                 } catch (JSONException e) {
@@ -131,7 +137,9 @@ public class MyService extends Service
                     try {
                         jTask = jFriendTasks.getJSONObject(j);
                         dis = distance(location.getLatitude(),jTask.getDouble("locLat"),location.getLongitude(),jTask.getDouble("locLong"));
-                        if (dis <= jTask.getInt("radius") && !jTask.getBoolean("entered") && !jTask.getBoolean("notified")){
+                        Log.e("dis",dis+"");
+                        radius = (10)*jTask.getInt("radius");
+                        if (dis <= radius && !jTask.getBoolean("entered")){
                             NotificationCompat.Builder mBuilder =
                                     new NotificationCompat.Builder(getApplicationContext())
                                             .setSmallIcon(R.drawable.ic_task)
@@ -153,7 +161,8 @@ public class MyService extends Service
                             each_task.putExtra("taskDesc",jTask.getString("taskDescription"));
                             each_task.putExtra("locName",jTask.getString("locName"));
                             each_task.putExtra("locAddress",jTask.getString("locAddress"));
-                            each_task.putExtra("radius",jTask.getInt("radius"));
+                            each_task.putExtra("" +
+                                    "radius",(10)*jTask.getInt("radius"));
                             each_task.putExtra("time",jTask.getString("time"));
                             each_task.putExtra("entry",jTask.getBoolean("entry"));
                             each_task.putExtra("friends",jTask.getBoolean("friends"));
@@ -171,14 +180,22 @@ public class MyService extends Service
 
                             jTask.put("entered",true);
                             jTask.put("notified",true);
+
+                            Log.e("Notified","True");
                         }
-                        if (dis > radius ){
+
+                        else if (dis > radius && !jTask.getBoolean("entered")){  // dis gets outside the range but he wasn't at the location, He is chilling outside
+                            Log.e(TAG,"Still outside");
+                        }
+                        else if (dis > radius && jTask.getBoolean("entered")){  // dis gets outside the range and he was at location, so mark him got out of location
                             jTask.put("entered",false);
-                            jTask.put("notified",false);
                             Log.e(TAG, "Exit");
 
                         }
-
+                        // else he is inside range and also has been notified, do nothing
+                        else{
+                            Log.e(TAG,"Got notification already");
+                        }
 
                     } catch (JSONException e) {
                         e.printStackTrace();

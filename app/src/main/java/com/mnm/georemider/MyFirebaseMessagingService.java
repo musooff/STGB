@@ -120,6 +120,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         chatting.putExtra("coming","notification");
         startActivity(chatting);
         */
+        sharedPreferences = getSharedPreferences("TaskData",0);
+        editor = sharedPreferences.edit();
+        editor.putString("coming","notification");
+        editor.putString("toWhom",title);
+        editor.putString("message","chillin");
+        editor.apply();
+
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(getApplicationContext())
                         .setSmallIcon(R.drawable.ic_task)
@@ -139,6 +146,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         each_task.putExtra("toWhom",title);
         each_task.putExtra("message","chillin");
         each_task.putExtra("coming","notification");
+
         each_task.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
                 Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent intent = PendingIntent.getActivity(getApplicationContext(), 0, each_task, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -151,6 +159,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         mNotificationManager.notify(0, mBuilder.build());
 
 
+
+        //Log.e("kjsnkjdf","kajsndkfjansdkjfnakjsdf");
     }
 
     public void  runa() throws Exception{

@@ -164,6 +164,9 @@ public class Friend_request extends AppCompatActivity {
                             mFriend.child(user).child("friendNames").setValue(userFriendNames);
                             mFriend.child(req_friend).child("friendNames").setValue(reqFriendNames);
                             //mFriend.child("Reqeust_Friend").child(req_friend).setValue("");
+                            //Log.d("Friend Request ID",reqfrindIDs);
+                            //Log.d("Friend Request Name", reqFriendNames);
+
                             mFriend.child("Request_Friend").child(user).setValue("default");
                             Intent friends = new Intent(getApplicationContext(),Friends.class);
                             startActivity(friends);

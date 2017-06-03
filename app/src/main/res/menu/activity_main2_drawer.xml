@@ -4,7 +4,7 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_task"
-            android:icon="@drawable/ic_task"
+            android:icon="@drawable/ic_task_main"
             android:title="Add Task" />
         <item
             android:id="@+id/nav_friends"
@@ -20,7 +20,7 @@
                 android:title="My Profile" />
             <item
                 android:id="@+id/nav_logout"
-                android:icon="@drawable/ic_locpt_30_5"
+                android:icon="@drawable/ic_logout"
                 android:title="Log Out" />
         </menu>
     </item>

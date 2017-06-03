@@ -26,7 +26,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * Created by moshe on 01/06/2017.
@@ -62,6 +64,7 @@ public class ChatActivity extends Activity {
         //String coming = extras.getString("coming");
         toWhom = sharedPreferences.getString("toWhom",null);
         String coming = sharedPreferences.getString("coming",null);
+
         if (coming.equals("private")){
             mChatCount.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -271,15 +274,16 @@ public class ChatActivity extends Activity {
             MessageViewHolder messageViewHolder = (MessageViewHolder)holder;
             final ChatMessage messageData = (ChatMessage) mRecyclerViewItems.get(position);
 
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyy h:mm a", Locale.US);
             if (username.equals(messageData.getFrom())){
                 messageViewHolder.ll_recipient.setVisibility(View.INVISIBLE);
                 messageViewHolder.tv_message_2.setText(messageData.getMessageText());
-                messageViewHolder.tv_time_2.setText(messageData.getMessageTime()+"");
+                messageViewHolder.tv_time_2.setText(dateFormat.format(messageData.getMessageTime()));
             }
             else {
                 messageViewHolder.ll_sender.setVisibility(View.INVISIBLE);
                 messageViewHolder.tv_message_1.setText(messageData.getMessageText());
-                messageViewHolder.tv_time_1.setText(messageData.getMessageTime()+"");
+                messageViewHolder.tv_time_1.setText(dateFormat.format(messageData.getMessageTime()));
             }
         }
 

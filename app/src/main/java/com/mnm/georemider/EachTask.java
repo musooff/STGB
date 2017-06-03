@@ -69,9 +69,9 @@ public class EachTask extends Activity {
             @Override
             public void onClick(View v) {
                 Intent chat = new Intent(getApplicationContext(),ChatActivity.class);
-                //chat.putExtra("toWhom",extras.getString("name"));
-                //chat.putExtra("message",tv_message.getText().toString());
-                //chat.putExtra("coming","private");
+                chat.putExtra("toWhom",extras.getString("name"));
+                chat.putExtra("message",tv_message.getText().toString());
+                chat.putExtra("coming","private");
                 SharedPreferences sharedPreferences;
                 SharedPreferences.Editor editor;
                 sharedPreferences = getSharedPreferences("TaskData",0);

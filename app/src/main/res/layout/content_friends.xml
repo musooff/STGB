@@ -8,12 +8,10 @@
     tools:context="com.mnm.georemider.MainActivity">
 
     <android.support.v7.widget.RecyclerView
-        android:layout_width="368dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:id="@+id/rv_friends"
-        tools:layout_editor_absoluteY="0dp"
-        tools:layout_editor_absoluteX="8dp">
+        android:id="@+id/rv_friends">
     </android.support.v7.widget.RecyclerView>
 
 </LinearLayout>
