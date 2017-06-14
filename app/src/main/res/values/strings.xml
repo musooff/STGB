@@ -20,4 +20,5 @@
         completions."
     </string>
     <string name="title_activity_register">Register</string>
+    <string name="title_activity_my_profile">MyProfile</string>
 </resources>

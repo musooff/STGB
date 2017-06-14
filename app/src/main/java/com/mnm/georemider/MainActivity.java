@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.InterpolatorRes;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -20,6 +21,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -277,6 +279,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(new_task);
                 drawer.closeDrawers();
                 break;
+            case R.id.nav_myprofile:
+                Intent my_profile = new Intent(getApplicationContext(),MyProfile.class);
+                startActivity(my_profile);
+                drawer.closeDrawers();
+                break;
             case R.id.nav_logout:
                 new android.app.AlertDialog.Builder(this)
                         .setTitle("Loging out")
@@ -303,6 +310,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         private final Context mContext;
         private final ArrayList<TaskData> mRecyclerViewItems;
+        DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference mFriend = mRootRef.child("clients");
+        DatabaseReference mUser;
+        SharedPreferences sharedPreferences;
 
         public TaskAdapter(Context context, ArrayList<TaskData> recyclerViewItems){
             this.mContext = context;
@@ -342,8 +353,52 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             TaskViewHolder taskViewHolder = (TaskViewHolder)holder;
             final TaskData taskData = (TaskData) mRecyclerViewItems.get(position);
+            Button finish_task = ((MainActivity.TaskAdapter.TaskViewHolder) holder).getButtonDone();
             taskViewHolder.name.setText(taskData.getName());
             taskViewHolder.description.setText(taskData.getNeed());
+            Log.d("Position: ",Integer.toString(position));
+            final int pos_click = position;
+            sharedPreferences = getSharedPreferences("TaskData",0);
+            final String user_name = sharedPreferences.getString("username","0");
+            finish_task.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mUser = mFriend.child(user_name);
+                    mUser.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            DataSnapshot mTask = dataSnapshot;
+                            String tasks = mTask.child("list_task").getValue(String.class);
+                            String[] list_task = tasks.split(",");
+                            int pos = Integer.parseInt(list_task[pos_click+1]);
+                            final String task_name = "TASK: "+ Integer.toString(pos);
+                            Log.d("Task Name :",task_name);
+                            mUser.child(task_name).removeValue();
+                            String input = "";
+                            // There is a problem ",6,6,6" like string
+                            for(int i = 0; i < list_task.length; i++){
+                                if((Integer.parseInt(list_task[i]) == pos) || (list_task[i]==null)){
+                                    continue;
+                                }else{
+                                    if(input==""){
+                                        input = list_task[i];
+                                    }else{
+                                        input = input+","+list_task[i];
+                                    }
+                                }
+                            }
+                            mUser.child("list_task").setValue(input);
+                            Intent main_activity = new Intent(getApplicationContext(),MainActivity.class);
+                            startActivity(main_activity);
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+            });
             if (taskData.isHasName()){
                 taskViewHolder.location.setText(taskData.getLocationName());
             }
@@ -369,6 +424,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             private TextView location;
             private ImageView imageView;
             private ImageView iv_friends;
+            private Button button_done;
             public TaskViewHolder(View itemView) {
                 super(itemView);
                 name = (TextView)itemView.findViewById(R.id.tv_task_name);
@@ -377,8 +433,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 location = (TextView)itemView.findViewById(R.id.tv_location);
                 imageView = (ImageView) itemView.findViewById(R.id.iv_user);
                 iv_friends = (ImageView)itemView.findViewById(R.id.iv_friends);
+                button_done = (Button)itemView.findViewById(R.id.task_done);
 
             }
+            public Button getButtonDone(){
+                return this.button_done;
+            }
+
         }
 
     }

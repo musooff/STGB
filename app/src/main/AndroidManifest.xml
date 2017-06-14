@@ -44,24 +44,29 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAmM7N3Lu8tK18sJ1z_mkE8jcM1RCWWuRA" />
 
-        <activity android:name=".Register"></activity>
-        <service android:name=".MyService" android:process=":my_service" />
-        <activity android:name=".EachTask"/>
+        <activity android:name=".Register" />
+
         <service
-            android:name=".MyFirebaseMessagingService">
+            android:name=".MyService"
+            android:process=":my_service" />
+
+        <activity android:name=".EachTask" />
+
+        <service android:name=".MyFirebaseMessagingService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <service
-            android:name=".MyFirebaseInstanceIDService">
+        <service android:name=".MyFirebaseInstanceIDService">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
+
         <activity android:name=".ChatActivity">
             <intent-filter>
                 <action android:name="noti" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -71,26 +76,34 @@
         <activity android:name=".Adding_friend_item" />
         <activity android:name=".Adding_friend_content" />
         <activity android:name=".Friend_request" />
-        <activity android:name=".Register"></activity>
-        <activity android:name=".AddingFriend"></activity>
-        <activity android:name=".Adding_friend_item"></activity>
-        <activity android:name=".Adding_friend_content"></activity>
-        <activity android:name=".Friend_reqest_items"></activity>
-        <activity android:name=".Friend_request"></activity>
-        <service android:name=".MyService" android:process=":my_service" />
-        <activity android:name=".EachTask"/>
+        <activity android:name=".Register" />
+        <activity android:name=".AddingFriend" />
+        <activity android:name=".Adding_friend_item" />
+        <activity android:name=".Adding_friend_content" />
+        <activity android:name=".Friend_reqest_items" />
+        <activity android:name=".Friend_request" />
+
         <service
-            android:name=".MyFirebaseMessagingService">
+            android:name=".MyService"
+            android:process=":my_service" />
+
+        <activity android:name=".EachTask" />
+
+        <service android:name=".MyFirebaseMessagingService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <service
-            android:name=".MyFirebaseInstanceIDService">
+        <service android:name=".MyFirebaseInstanceIDService">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
+
+        <activity
+            android:name=".MyProfile"
+            android:label="@string/title_activity_my_profile"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
