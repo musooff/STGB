@@ -30,8 +30,9 @@ public class MyService extends Service
 {
     private static final String TAG = "BOOMBOOMTESTGPS";
     private LocationManager mLocationManager = null;
-    private static final int LOCATION_INTERVAL = 1000;
-    private static final float LOCATION_DISTANCE = 10f;
+
+    private static final int LOCATION_INTERVAL = 600000;
+    private static final float LOCATION_DISTANCE = 500;
 
 
     public String taskName;
@@ -125,6 +126,10 @@ public class MyService extends Service
                     }
                     // else he is inside range and also has been notified, do nothing
 
+                    String userData = jUser.toString();
+                    editor.putString("userJsonData",userData);
+                    editor.apply();
+
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -196,6 +201,9 @@ public class MyService extends Service
                         else{
                             Log.e(TAG,"Got notification already");
                         }
+                        String userData = jUser.toString();
+                        editor.putString("userJsonData",userData);
+                        editor.apply();
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -206,53 +214,6 @@ public class MyService extends Service
             String userData = jUser.toString();
             editor.putString("userJsonData",userData);
             editor.apply();
-
-
-            /*
-            double dis = distance(location.getLatitude(),locLat,location.getLongitude(),locLong);
-            if (dis <= radius && !entered && !notified){
-                Log.e(TAG, "entered: ");
-                //notCount = 1;
-                //notify user
-                NotificationCompat.Builder mBuilder =
-                        new NotificationCompat.Builder(getApplicationContext())
-                                .setSmallIcon(R.drawable.ic_task)
-                                .setContentTitle(taskName)
-                                .setContentText(taskDescription);
-
-                Intent each_task = new Intent(getApplicationContext(),EachTask.class);
-                each_task.putExtra("taskName",taskName);
-                each_task.putExtra("taskDesc",taskDescription);
-                each_task.putExtra("locName",locName);
-                each_task.putExtra("locAddress",locAddress);
-                each_task.putExtra("radius",radius);
-                each_task.putExtra("time",time);
-                each_task.putExtra("entry",isEntry);
-                each_task.putExtra("friends",isFriends);
-                startActivity(each_task);
-                PendingIntent intent = PendingIntent.getActivity(getApplicationContext(), 0, each_task, 0);
-
-                mBuilder.setContentIntent(intent);
-
-
-
-                NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-                // notificationID allows you to update the notification later on.
-                mNotificationManager.notify(0, mBuilder.build());
-
-                notified = true;
-                entered = true;
-
-            }
-            if (dis > radius ){
-                entered = false;
-                notified = false;
-                Log.e(TAG, "Exit");
-
-            }
-
-            */
         }
 
         @Override
