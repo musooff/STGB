@@ -260,14 +260,18 @@ public class TaskActivity extends AppCompatActivity {
 
                     mUser = mClients.child(sharedPreferences.getString("username",null));
                     createdTimestamp = ServerValue.TIMESTAMP;
-                    DatabaseReference taskCount  = mUser.child("taskCount");
-                    taskCount.addListenerForSingleValueEvent(new ValueEventListener() {
+                    //DatabaseReference taskCount  = mUser.child("taskCount");
+
+                    mUser.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            long count = dataSnapshot.getValue(Long.class);
+                            long count = dataSnapshot.child("taskCount").getValue(Long.class);
                             count++;
+                            String task_list = dataSnapshot.child("list_task").getValue(String.class);
                             DatabaseReference newTask = mUser.child("TASK: "+count);
                             newTask.child("taskName").setValue(taskName);
+                            mUser.child("list_task").setValue(task_list+","+count);
+                            Log.d("Task Click","12");
                             newTask.child("taskDescription").setValue(taskDescription);
                             newTask.child("hasLocName").setValue(hasName);
                             newTask.child("locName").setValue(str_locName);
@@ -293,6 +297,7 @@ public class TaskActivity extends AppCompatActivity {
                                 JSONObject jTask = new JSONObject();
                                 jTask.put("taskName",taskName);
                                 jTask.put("taskDescription",taskDescription);
+                                jTask.put("list_task",task_list+","+count);
                                 jTask.put("hasLocName",hasName);
                                 jTask.put("locName",str_locName);
                                 jTask.put("locAddress",str_logLocation);

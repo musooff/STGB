@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -77,7 +78,8 @@ public class LoginActivity extends AppCompatActivity {
                                         editor.putString("username",str_username[0]);
                                         editor.putString("password",str_pass[0]);
                                         editor.putString("clientName",username.child("name").getValue(String.class));
-
+                                        editor.putString("clientEmail",username.child("email").getValue(String.class));
+                                        Log.d(username.child("email").getValue(String.class)," from Firebase Email");
                                         editor.putBoolean("dataExists",true);
                                         editor.apply();
 

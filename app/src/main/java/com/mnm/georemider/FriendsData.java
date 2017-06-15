@@ -12,6 +12,8 @@ public class FriendsData {
         this.username = username;
     }
 
+
+
     public String getName() {
         return name;
     }

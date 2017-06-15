@@ -62,6 +62,7 @@ public class Friend_request extends AppCompatActivity {
                 //DataSnapshot userName = dataSnapshot.child(user);
                 Log.d("Request UserName: ",user);
                 String frindNames = mFrindNames.child("name").getValue(String.class);
+
                 String frindIDs = req_friend;
                 Log.d("After Firebase: ",frindNames);
                 Log.d("After Firebase ID:",req_friend);
