@@ -328,43 +328,49 @@ public class TaskActivity extends AppCompatActivity {
                                 mFriends.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
-                                        final String[] friendIDs = dataSnapshot.getValue(String.class).split(",");
-                                        for (int j = 0; j < friendIDs.length; j++){
-                                            final DatabaseReference friend = mClients.child(friendIDs[j]);
-                                            final int finalJ = j;
-                                            friend.addListenerForSingleValueEvent(new ValueEventListener() {
-                                                @Override
-                                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                                    long count = dataSnapshot.child("friendTaskCount").getValue(Long.class);
-                                                    count++;
+                                        //final String[] friendIDs = dataSnapshot.getValue(String.class).split(",");
+                                        final String strFriends = dataSnapshot.getValue(String.class);
+                                        final String[] friendIDs = strFriends.split(",");
+                                        //Toast.makeText(getApplicationContext(),"|"+strFriends+"|"+friendIDs.length,Toast.LENGTH_SHORT).show();
+                                        if (!strFriends.equals("")){
+                                            for (int j = 0; j < friendIDs.length; j++){
+                                                final DatabaseReference friend = mClients.child(friendIDs[j]);
+                                                final int finalJ = j;
+                                                friend.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                                        long count = dataSnapshot.child("friendTaskCount").getValue(Long.class);
+                                                        count++;
 
-                                                    DatabaseReference friendTask = friend.child("Friend TASK: "+count);
-                                                    friendTask.child("name").setValue(mUser.getKey());
-                                                    friendTask.child("taskName").setValue(taskName);
-                                                    friendTask.child("taskDescription").setValue(taskDescription);
-                                                    friendTask.child("hasLocName").setValue(hasName);
-                                                    friendTask.child("locName").setValue(str_locName);
-                                                    friendTask.child("locAddress").setValue(str_logLocation);
-                                                    friendTask.child("locLat").setValue(latitude);
-                                                    friendTask.child("locLong").setValue(longitude);
-                                                    friendTask.child("time").setValue(str_dates);
-                                                    friendTask.child("friends").setValue(isFriends);
-                                                    friendTask.child("radius").setValue(radius);
-                                                    friendTask.child("entry").setValue(isEntry);
-                                                    friend.child("friendTaskCount").setValue(count);
+                                                        DatabaseReference friendTask = friend.child("Friend TASK: "+count);
+                                                        friendTask.child("name").setValue(mUser.getKey());
+                                                        friendTask.child("taskName").setValue(taskName);
+                                                        friendTask.child("taskDescription").setValue(taskDescription);
+                                                        friendTask.child("hasLocName").setValue(hasName);
+                                                        friendTask.child("locName").setValue(str_locName);
+                                                        friendTask.child("locAddress").setValue(str_logLocation);
+                                                        friendTask.child("locLat").setValue(latitude);
+                                                        friendTask.child("locLong").setValue(longitude);
+                                                        friendTask.child("time").setValue(str_dates);
+                                                        friendTask.child("friends").setValue(isFriends);
+                                                        friendTask.child("radius").setValue(radius);
+                                                        friendTask.child("entry").setValue(isEntry);
+                                                        friend.child("friendTaskCount").setValue(count);
 
-                                                    // need to change
-                                                    mClients.child("taskCreated").child("username").setValue(sharedPreferences.getString("username",""));
+                                                        // need to change
+                                                        mClients.child("taskCreated").child("username").setValue(sharedPreferences.getString("username",""));
 
 
-                                                }
+                                                    }
 
-                                                @Override
-                                                public void onCancelled(DatabaseError databaseError) {
+                                                    @Override
+                                                    public void onCancelled(DatabaseError databaseError) {
 
-                                                }
-                                            });
+                                                    }
+                                                });
+                                            }
                                         }
+
                                     }
 
                                     @Override
