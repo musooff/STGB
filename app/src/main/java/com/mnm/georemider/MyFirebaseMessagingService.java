@@ -81,7 +81,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         else if (message.equals("request_friend")){
             String to = remoteMessage.getNotification().getTitle();
             String from =remoteMessage.getNotification().getSound();
+            Log.d("Request Friend on Log",from);
             if(!from.equals("default")){
+                Log.d("Request Friend on Log","Test");
+                DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
+                DatabaseReference mClients = mRootRef.child("list_clients");
+                DatabaseReference mFriend = mRootRef.child("Request_Friend");
                 NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
                 builder.setSmallIcon(R.drawable.icon_friends);
                 sharedPreferences = getSharedPreferences("TaskData",0);

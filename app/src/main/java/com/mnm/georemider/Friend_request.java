@@ -32,7 +32,7 @@ public class Friend_request extends AppCompatActivity {
     ArrayList<FriendsData> friendsDatas;
     DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
     DatabaseReference mClients = mRootRef.child("list_clients");
-    DatabaseReference mFriend = mRootRef.child("clients");
+    DatabaseReference mFriend = mRootRef.child("Request_Friend");
     DatabaseReference mUser;
     SharedPreferences sharedPreferences;
     public static String name;
@@ -61,13 +61,12 @@ public class Friend_request extends AppCompatActivity {
                 DataSnapshot mFrindNames = dataSnapshot.child(req_friend);
                 //DataSnapshot userName = dataSnapshot.child(user);
                 Log.d("Request UserName: ",user);
-                String frindNames = mFrindNames.child("name").getValue(String.class);
                 String frindIDs = req_friend;
                 Log.d("After Firebase: ",req_friend);
                 //Log.d("After Firebase ID:",req_friend);
-                if(frindNames != null){
+                if(frindIDs != null){
                     Log.d("Adding Start","Friend");
-                    friendsDatas.add(new FriendsData(frindNames, "@" + frindIDs));
+                    friendsDatas.add(new FriendsData("Request Friend ", "From ID: " + frindIDs));
                     rv_friends.getAdapter().notifyDataSetChanged();
                 }
                 else{
@@ -144,6 +143,7 @@ public class Friend_request extends AppCompatActivity {
                             String reqFriendNames = reqFriendName.getValue(String.class);
                             String userName = username.getValue(String.class);
                             String reqName = reqname.getValue(String.class);
+                            Log.d("Request Friend Name:",reqName);
                             if(userfrindIDs.equals("")){
                                 userfrindIDs = req_friend;
                                 userFriendNames = reqName;
@@ -151,7 +151,7 @@ public class Friend_request extends AppCompatActivity {
                                 userfrindIDs = userfrindIDs + "," + req_friend;
                                 userFriendNames = userFriendNames + "," +reqName;
                             }
-                            if(reqfrindIDs.equals("")){
+                            if(reqfrindIDs==null){
                                 reqfrindIDs = user;
                                 reqFriendNames = userName;
                             }
