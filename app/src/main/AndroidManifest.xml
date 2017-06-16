@@ -51,8 +51,6 @@
             android:name=".MyService"
             android:process=":my_service" />
 
-        <activity android:name=".EachTask" />
-
         <service android:name=".MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
@@ -82,19 +80,11 @@
             </intent-filter>
         </activity>
         <service android:name=".MyService" android:process=":my_service" />
-        <activity android:name=".Friend_request" />
-        <activity android:name=".Register" />
-        <activity android:name=".AddingFriend" />
-        <activity android:name=".Adding_friend_item" />
-        <activity android:name=".Adding_friend_content" />
         <activity android:name=".Friend_reqest_items" />
-        <activity android:name=".Friend_request" />
 
         <service
             android:name=".MyService"
             android:process=":my_service" />
-
-        <activity android:name=".EachTask" />
 
         <service android:name=".MyFirebaseMessagingService">
             <intent-filter>

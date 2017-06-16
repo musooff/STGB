@@ -44,7 +44,7 @@ public class Friend_request extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("TaskData",0);
         accept = (Button)findViewById(R.id.friend_req_add_friend);
         reject = (Button)findViewById(R.id.friend_req_reject_friend);
-        String from = sharedPreferences.getString("request_friend","0");
+        final String from = sharedPreferences.getString("request_friend","0");
         rv_friends = (RecyclerView) findViewById(R.id.rv_friends);
         friendsDatas = new ArrayList<>();
         Friend_request.FriendAdapter friendAdapter = new Friend_request.FriendAdapter(this, friendsDatas);
@@ -62,10 +62,9 @@ public class Friend_request extends AppCompatActivity {
                 //DataSnapshot userName = dataSnapshot.child(user);
                 Log.d("Request UserName: ",user);
                 String frindNames = mFrindNames.child("name").getValue(String.class);
-
                 String frindIDs = req_friend;
-                Log.d("After Firebase: ",frindNames);
-                Log.d("After Firebase ID:",req_friend);
+                Log.d("After Firebase: ",req_friend);
+                //Log.d("After Firebase ID:",req_friend);
                 if(frindNames != null){
                     Log.d("Adding Start","Friend");
                     friendsDatas.add(new FriendsData(frindNames, "@" + frindIDs));

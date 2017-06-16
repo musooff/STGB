@@ -17,4 +17,6 @@ Android 6.0.0 Google Emulator
 
 If you are using Android 6+ make sure that location services are permitted
 
+[Noted]: If you use the same device to login with multiple users, you must always delete the cache data on application
+
 If you have any difficulties running our source code, please contact us.
